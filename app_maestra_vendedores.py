@@ -23,7 +23,7 @@ def login():
         if usuario in USUARIOS and contraseña == USUARIOS[usuario]:
             st.session_state["autenticado"] = True
             st.session_state["usuario"] = usuario
-            st.experimental_rerun()
+            st.rerun()
         else:
             st.sidebar.error("❌ Usuario o contraseña incorrectos")
 
