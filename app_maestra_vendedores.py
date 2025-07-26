@@ -45,3 +45,21 @@ with st.form("formulario_registro"):
                 st.error(f"❌ Error al guardar datos: {e}")
         else:
             st.warning("Por favor completa todos los campos.")
+            
+
+# Mostrar los datos actuales de la hoja
+st.subheader("📄 Datos registrados")
+
+try:
+    # Obtiene todas las filas como lista de diccionarios
+    registros = sheet.get_all_records()
+    
+    if registros:
+        # Mostrar como DataFrame
+        import pandas as pd
+        df = pd.DataFrame(registros)
+        st.dataframe(df, use_container_width=True)
+    else:
+        st.info("Aún no hay registros en la hoja.")
+except Exception as e:
+    st.error(f"⚠️ Error al obtener datos: {e}")
