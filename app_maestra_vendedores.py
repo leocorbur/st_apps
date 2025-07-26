@@ -6,6 +6,35 @@ import os
 
 st.set_page_config(page_title="Formulario de Registro", page_icon="📝")
 
+# --- Usuarios permitidos ---
+USUARIOS = {
+    "leo": "dinamita",
+    "raul": "daddy"
+}
+
+# --- Login simple ---
+def login():
+    st.sidebar.title("🔐 Ingreso de usuario")
+    usuario = st.sidebar.text_input("Usuario")
+    contraseña = st.sidebar.text_input("Contraseña", type="password")
+    ingresar = st.sidebar.button("Ingresar")
+
+    if ingresar:
+        if usuario in USUARIOS and contraseña == USUARIOS[usuario]:
+            st.session_state["autenticado"] = True
+            st.session_state["usuario"] = usuario
+            st.experimental_rerun()
+        else:
+            st.sidebar.error("❌ Usuario o contraseña incorrectos")
+
+# --- Comprobación de sesión ---
+if "autenticado" not in st.session_state:
+    st.session_state["autenticado"] = False
+
+if not st.session_state["autenticado"]:
+    login()
+    st.stop()
+
 SECRETO_PATH = "/etc/secrets/GOOGLE_CREDENTIALS"
 
 if not os.path.exists(SECRETO_PATH):
