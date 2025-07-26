@@ -6,15 +6,17 @@ import os
 
 st.set_page_config(page_title="Formulario de Registro", page_icon="📝")
 
-credenciales_json = os.environ.get("GOOGLE_CREDENTIALS")
+SECRETO_PATH = "/etc/secrets/GOOGLE_CREDENTIALS"
 
-if credenciales_json is None:
-    st.error("No se encontró la variable de entorno GOOGLE_CREDENTIALS.")
+if not os.path.exists(SECRETO_PATH):
+    st.error("❌ No se encontró el archivo de credenciales.")
     st.stop()
 
 try:
-    info = json.loads(credenciales_json)
-    creds = Credentials.from_service_account_info(info, scopes=[
+    with open(SECRETO_PATH) as f:
+        credenciales_json = json.load(f)
+
+    creds = Credentials.from_service_account_info(credenciales_json, scopes=[
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive"
     ])
