@@ -6,13 +6,21 @@ import os
 
 st.set_page_config(page_title="Formulario de Registro", page_icon="📝")
 
-# --- Usuarios permitidos ---
-USUARIOS = {
-    "leo": "dinamita",
-    "raul": "daddy"
-}
+# --- Leer archivo secreto con usuarios y contraseñas ---
+USUARIOS_PATH = "/etc/secrets/USUARIOS_CONTRASEÑAS"
 
-# --- Login simple ---
+if not os.path.exists(USUARIOS_PATH):
+    st.error("❌ Archivo de usuarios no encontrado.")
+    st.stop()
+
+try:
+    with open(USUARIOS_PATH) as f:
+        USUARIOS = json.load(f)
+except Exception as e:
+    st.error(f"❌ Error al leer archivo de usuarios: {e}")
+    st.stop()
+
+# --- Función para login ---
 def login():
     st.sidebar.title("🔐 Ingreso de usuario")
     usuario = st.sidebar.text_input("Usuario")
@@ -34,6 +42,7 @@ if "autenticado" not in st.session_state:
 if not st.session_state["autenticado"]:
     login()
     st.stop()
+
 
 SECRETO_PATH = "/etc/secrets/GOOGLE_CREDENTIALS"
 
