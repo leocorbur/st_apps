@@ -7,7 +7,7 @@ import os
 st.set_page_config(page_title="Formulario de Registro", page_icon="📝")
 
 # --- Leer archivo secreto con usuarios y contraseñas ---
-USUARIOS_PATH = "/etc/secrets/USUARIOS_CONTRASEÑAS"
+USUARIOS_PATH = "/etc/secrets/USUARIOS_CONTRASENAS"
 
 if not os.path.exists(USUARIOS_PATH):
     st.error("❌ Archivo de usuarios no encontrado.")
