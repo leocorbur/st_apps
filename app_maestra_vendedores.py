@@ -99,7 +99,7 @@ try:
 
         # Filtrar por el correo del usuario logueado
         correo_usuario = st.session_state["usuario"]  # debe ser un correo
-        df_usuario = df[df["Correo"] == correo_usuario]
+        df_usuario = df[df["correo_propietario"] == correo_usuario]
 
         st.dataframe(df_usuario, use_container_width=True)
     else:
