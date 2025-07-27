@@ -96,7 +96,12 @@ try:
         # Mostrar como DataFrame
         import pandas as pd
         df = pd.DataFrame(registros)
-        st.dataframe(df, use_container_width=True)
+
+        # Filtrar por el correo del usuario logueado
+        correo_usuario = st.session_state["usuario"]  # debe ser un correo
+        df_usuario = df[df["Correo"] == correo_usuario]
+
+        st.dataframe(df_usuario, use_container_width=True)
     else:
         st.info("Aún no hay registros en la hoja.")
 except Exception as e:
