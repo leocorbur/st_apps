@@ -81,6 +81,7 @@ with st.form("formulario_registro"):
     ubicacion_provincia	 = st.text_input("Ubicación provincia")
     ubicacion_distrito = st.text_input("Ubicación distrito")
     fecha_inicio = st.date_input("Fecha de inicio", value=datetime.date.today())
+    fecha_inicio =  str(fecha_inicio)
                                  
     
     
