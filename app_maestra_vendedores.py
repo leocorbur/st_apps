@@ -3,6 +3,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 import json
 import os
+import datetime
 
 st.set_page_config(page_title="Formulario de Registro", page_icon="📝")
 
@@ -68,21 +69,73 @@ except Exception as e:
 st.title("📋 Formulario de Registro de Vendedores")
 
 with st.form("formulario_registro"):
-    nombre = st.text_input("Nombre")
+    etl_timestamp = datetime.date.today()
+    correo_backoffice = st.session_state["usuario"]
+    nombre_colaborador_agencia = st.text_input("Nombre colaborador")
+    tipo_documento = st.selectbox("Tipo documento:", ["DNI", "CE"])
+    numero_documento = st.text_input("Número documento")
     correo = st.text_input("Correo electrónico")
-    dni = st.text_input("DNI")
+    celular = st.text_input("Celular")
+    cargo = st.selectbox("Cargo:", ["Backoffice", "Supervisor", "Vendedor"])
+    ubicacion_departamento = st.text_input("Ubicación departamento")
+    ubicacion_provincia	 = st.text_input("Ubicación provincia")
+    ubicacion_distrito = st.text_input("Ubicación distrito")
+    fecha_inicio = st.date_input("Fecha de inicio", value=datetime.date.today())
+                                 
+    
+    
 
     submitted = st.form_submit_button("Enviar")
 
+"""    
     if submitted:
         if nombre and correo and dni:
             try:
-                sheet.append_row([nombre, correo, dni])
+                sheet.append_row([etl_timestamp, correo_backoffice, nombre_colaborador_agencia, tipo_documento, 
+                                  numero_documento, correo, celular, cargo, ubicacion_departamento, ubicacion_provincia, ubicacion_distrito, fecha_inicio])
                 st.success("✅ Datos enviados correctamente.")
             except Exception as e:
                 st.error(f"❌ Error al guardar datos: {e}")
         else:
             st.warning("Por favor completa todos los campos.")
+"""
+
+
+    if submitted:
+        campos = [
+            nombre_colaborador_agencia,
+            tipo_documento,
+            numero_documento,
+            correo,
+            celular,
+            cargo,
+            ubicacion_departamento,
+            ubicacion_provincia,
+            ubicacion_distrito,
+            fecha_inicio
+        ]
+
+        if all(campos):
+            try:
+                sheet.append_row([
+                    etl_timestamp,
+                    correo_backoffice,
+                    nombre_colaborador_agencia,
+                    tipo_documento,
+                    numero_documento,
+                    correo,
+                    celular,
+                    cargo,
+                    ubicacion_departamento,
+                    ubicacion_provincia,
+                    ubicacion_distrito,
+                    fecha_inicio
+                ])
+                st.success("✅ Datos enviados correctamente.")
+            except Exception as e:
+                st.error(f"❌ Error al guardar datos: {e}")
+        else:
+            st.warning("⚠ Por favor completa todos los campos antes de enviar.")
             
 
 # Mostrar los datos actuales de la hoja
