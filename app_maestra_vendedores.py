@@ -87,20 +87,6 @@ with st.form("formulario_registro"):
 
     submitted = st.form_submit_button("Enviar")
 
-"""    
-    if submitted:
-        if nombre and correo and dni:
-            try:
-                sheet.append_row([etl_timestamp, correo_backoffice, nombre_colaborador_agencia, tipo_documento, 
-                                  numero_documento, correo, celular, cargo, ubicacion_departamento, ubicacion_provincia, ubicacion_distrito, fecha_inicio])
-                st.success("✅ Datos enviados correctamente.")
-            except Exception as e:
-                st.error(f"❌ Error al guardar datos: {e}")
-        else:
-            st.warning("Por favor completa todos los campos.")
-"""
-
-
     if submitted:
         campos = [
             nombre_colaborador_agencia,
