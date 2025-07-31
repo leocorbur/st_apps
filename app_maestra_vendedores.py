@@ -69,7 +69,7 @@ except Exception as e:
 st.title("📋 Formulario de Registro de Vendedores")
 
 with st.form("formulario_registro"):
-    etl_timestamp = datetime.date.today()
+    etl_timestamp = str(datetime.date.today())
     correo_backoffice = st.session_state["usuario"]
     nombre_colaborador_agencia = st.text_input("Nombre colaborador")
     tipo_documento = st.selectbox("Tipo documento:", ["DNI", "CE"])
