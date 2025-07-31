@@ -94,7 +94,7 @@ with st.form("formulario_registro"):
     if submitted:
         if not numero_documento.isdigit():
             st.error("❌ El número de documento debe contener solo números.")
-        elif len(numero_documento) <> 8:
+        elif len(numero_documento) != 8:
             st.error("❌ El número de documento debe tener 8 dígitos.")
         else:
             campos = [
