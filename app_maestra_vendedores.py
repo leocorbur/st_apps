@@ -92,10 +92,12 @@ with st.form("formulario_registro"):
     submitted = st.form_submit_button("Enviar")
 
     if submitted:
-        if not numero_documento.isdigit():
-            st.error("❌ El número de documento debe contener solo números.")
-        elif len(numero_documento) != 8:
-            st.error("❌ El número de documento debe tener 8 dígitos.")
+        if not numero_documento.isdigit() or len(numero_documento) != 8:
+            st.error("❌ El número de documento debe contener solo números y 8 dígitos.")
+        elif not re.match(r"[^@]+@[^@]+\.[^@]+", correo):
+            st.error("❌ El correo electrónico no tiene un formato válido.")
+        elif not celular.isdigit() or len(celular) != 9 or not celular.startswith("9"):
+            st.error("❌ El número de celular debe tener 9 dígitos y empezar con 9.")
         else:
             campos = [
                 nombre_colaborador_agencia,
