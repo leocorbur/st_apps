@@ -92,40 +92,45 @@ with st.form("formulario_registro"):
     submitted = st.form_submit_button("Enviar")
 
     if submitted:
-        campos = [
-            nombre_colaborador_agencia,
-            tipo_documento,
-            numero_documento,
-            correo,
-            celular,
-            cargo,
-            ubicacion_departamento,
-            ubicacion_provincia,
-            ubicacion_distrito,
-            fecha_inicio
-        ]
-
-        if all(campos):
-            try:
-                sheet.append_row([
-                    etl_timestamp,
-                    correo_backoffice,
-                    nombre_colaborador_agencia,
-                    tipo_documento,
-                    numero_documento,
-                    correo,
-                    celular,
-                    cargo,
-                    ubicacion_departamento,
-                    ubicacion_provincia,
-                    ubicacion_distrito,
-                    fecha_inicio
-                ])
-                st.success("✅ Datos enviados correctamente.")
-            except Exception as e:
-                st.error(f"❌ Error al guardar datos: {e}")
+        if not numero_documento.isdigit():
+            st.error("❌ El número de documento debe contener solo números.")
+        elif len(numero_documento) <> 8:
+            st.error("❌ El número de documento debe tener 8 dígitos.")
         else:
-            st.warning("⚠ Por favor completa todos los campos antes de enviar.")
+            campos = [
+                nombre_colaborador_agencia,
+                tipo_documento,
+                numero_documento,
+                correo,
+                celular,
+                cargo,
+                ubicacion_departamento,
+                ubicacion_provincia,
+                ubicacion_distrito,
+                fecha_inicio
+            ]
+    
+            if all(campos):
+                try:
+                    sheet.append_row([
+                        etl_timestamp,
+                        correo_backoffice,
+                        nombre_colaborador_agencia,
+                        tipo_documento,
+                        numero_documento,
+                        correo,
+                        celular,
+                        cargo,
+                        ubicacion_departamento,
+                        ubicacion_provincia,
+                        ubicacion_distrito,
+                        fecha_inicio
+                    ])
+                    st.success("✅ Datos enviados correctamente.")
+                except Exception as e:
+                    st.error(f"❌ Error al guardar datos: {e}")
+            else:
+                st.warning("⚠ Por favor completa todos los campos antes de enviar.")
             
 
 # Mostrar los datos actuales de la hoja
