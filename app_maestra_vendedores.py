@@ -5,6 +5,7 @@ import json
 import os
 import datetime
 import pytz
+import re
 
 st.set_page_config(page_title="Formulario de Registro", page_icon="📝")
 
