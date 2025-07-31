@@ -4,6 +4,7 @@ from google.oauth2.service_account import Credentials
 import json
 import os
 import datetime
+import pytz
 
 st.set_page_config(page_title="Formulario de Registro", page_icon="📝")
 
@@ -69,7 +70,9 @@ except Exception as e:
 st.title("📋 Formulario de Registro de Vendedores")
 
 with st.form("formulario_registro"):
-    etl_timestamp = str(datetime.date.today())
+    tz = pytz.timezone("America/Lima")
+    etl_timestamp = datetime.datetime.now(tz).date()
+    etl_timestamp = str(etl_timestamp)
     correo_backoffice = st.session_state["usuario"]
     nombre_colaborador_agencia = st.text_input("Nombre colaborador")
     tipo_documento = st.selectbox("Tipo documento:", ["DNI", "CE"])
