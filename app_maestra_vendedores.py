@@ -60,7 +60,7 @@ try:
         "https://www.googleapis.com/auth/drive"
     ])
     client = gspread.authorize(creds)
-    sheet = client.open("maestra_vendedores").sheet1
+    sheet = client.open("maestra_vendedores").worksheet("colaboradores")
 except Exception as e:
     st.error(f"⚠️ Error al conectar con Google Sheets: {e}")
     st.stop()
@@ -137,8 +137,8 @@ try:
         df = pd.DataFrame(registros)
 
         # Filtrar por el correo del usuario logueado
-        correo_usuario = st.session_state["usuario"]  # debe ser un correo
-        df_usuario = df[df["correo_propietario"] == correo_usuario]
+        #correo_usuario = st.session_state["usuario"]  # debe ser un correo
+        df_usuario = df[df["correo_backoffice"] == correo_backoffice]
 
         st.dataframe(df_usuario, use_container_width=True)
     else:
