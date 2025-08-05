@@ -31,6 +31,14 @@ def login():
     ingresar = st.sidebar.button("Ingresar")
 
     # Mostrar contenido en la parte principal
+    st.markdown(
+    """
+    <div style='text-align: center;'>
+        <img src='https://raw.githubusercontent.com/leocorbur/st_apps/refs/heads/main/images/logo_horizontal_morado.png' width='60%'/>
+    </div>
+    """,
+    unsafe_allow_html=True
+    )
     st.title("👋 Bienvenidos al Portal de Gestión de Vendedores Indirectos")
     st.markdown("""
         Este portal ha sido diseñado para facilitar la gestión de solicitudes relacionadas con vendedores indirectos.
@@ -47,7 +55,7 @@ def login():
 
         ¡Gracias por tu colaboración!
     """)
-    st.image("https://raw.githubusercontent.com/leocorbur/st_apps/refs/heads/main/images/logo_horizontal_blanco.png", width=200) 
+    st.image("https://raw.githubusercontent.com/leocorbur/st_apps/refs/heads/main/images/logo_horizontal_morado.png", width=200) 
 
     if ingresar:
         if usuario in USUARIOS and contraseña == USUARIOS[usuario]:
