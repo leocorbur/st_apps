@@ -153,6 +153,32 @@ try:
         df_usuario = df[df["correo_backoffice"] == correo_backoffice]
 
         st.dataframe(df_usuario, use_container_width=True)
+
+        st.markdown("---")
+        st.subheader("🔻 Dar de baja a un colaborador")
+
+        # Seleccion por nombre
+        df_usuario_activos = df_usuario[df_usuario["fecha_baja"] == ""]
+        nombres_disponibles = df_usuario_activos["nombre_colaborador_agencia"].tolist()
+        seleccionado = st.selectbox("Selecciona al colaborador a dar de baja:", nombres_disponibles)
+
+        motivo_baja = st.text_input("Motivo de baja")
+        if st.button("Dar de baja"):
+            if motivo_baja.strip() == "":
+                st.warning("⚠️ Por favor ingresa un motivo.")
+            else:
+                index_global = df[(df["correo_backoffice"] == correo_backoffice) &
+                    (df["nombre_colaborador_agencia"] == seleccionado)].index[0]
+                
+                tz = pytz.timezone("America/Lima")
+                fecha_baja = datetime.datetime.now(tz).strftime("%Y-%m-%d")
+
+                # Actualizar columnas en la hoja (sumar 2 porque .get_all_records() ignora encabezado)
+                sheet.update_cell(index_global + 2, df.columns.get_loc("fecha_baja") + 1, fecha_baja)
+                sheet.update_cell(index_global + 2, df.columns.get_loc("motivo_baja") + 1, motivo_baja)
+
+                st.success(f"✅ {seleccionado} fue dado de baja correctamente.")
+                
     else:
         st.info("Aún no hay registros en la hoja.")
 except Exception as e:
