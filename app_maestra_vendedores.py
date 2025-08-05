@@ -39,7 +39,11 @@ def login():
     """,
     unsafe_allow_html=True
     )
-    st.title("👋 Bienvenidos al Portal de Gestión de Vendedores Indirectos")
+    #st.title("👋 Bienvenidos al Portal de Gestión de Vendedores Indirectos")
+    st.markdown("""
+        <h1 style='text-align: center; margin-bottom: 0.5em;'>👋 Bienvenidos al Portal de Gestión de Vendedores Indirectos</h1>
+            """, unsafe_allow_html=True)
+    
     st.markdown("""
         Este portal ha sido diseñado para facilitar la gestión de solicitudes relacionadas con vendedores indirectos.
 
