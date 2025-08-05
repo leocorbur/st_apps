@@ -47,7 +47,7 @@ def login():
 
         ¡Gracias por tu colaboración!
     """)
-    #st.image("logo.png", width=200)  # solo si tienes un logo o imagen
+    st.image("https://raw.githubusercontent.com/leocorbur/st_apps/refs/heads/main/images/logo_horizontal_blanco.png", width=200) 
 
     if ingresar:
         if usuario in USUARIOS and contraseña == USUARIOS[usuario]:
