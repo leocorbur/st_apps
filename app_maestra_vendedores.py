@@ -32,16 +32,19 @@ def login():
 
     # Mostrar contenido en la parte principal
     st.title("👋 Bienvenidos al Portal de Gestión de Vendedores Indirectos")
-    st.write("""
-        Este portal ha sido diseñado para facilitar la gestión de solicitudes relacionadas con vendedores indirectos. Desde aquí, podrás:
-             
-        • Registrar nuevas solicitudes de alta de vendedores indirectos
-        • Solicitar la baja de vendedores indirectos existentes
-        • Hacer seguimiento al estado de tus solicitudes
-             
-        Nuestro objetivo es ofrecerte una herramienta ágil y centralizada que simplifique tus gestiones y mejore la comunicación entre tu equipo y el nuestro.     
-        Si tienes dudas o necesitas asistencia, no dudes en contactarnos.
-      
+    st.markdown("""
+        Este portal ha sido diseñado para facilitar la gestión de solicitudes relacionadas con vendedores indirectos.
+
+        **Desde aquí podrás:**
+
+        - Registrar nuevas solicitudes de alta de vendedores indirectos  
+        - Solicitar la baja de vendedores indirectos existentes  
+        - Hacer seguimiento al estado de tus solicitudes
+
+        Nuestro objetivo es ofrecerte una herramienta ágil y centralizada que simplifique tus gestiones y mejore la comunicación entre tu equipo y el nuestro.
+
+        Si tienes dudas o necesitas asistencia, **no dudes en contactarnos**.
+
         ¡Gracias por tu colaboración!
     """)
     #st.image("logo.png", width=200)  # solo si tienes un logo o imagen
