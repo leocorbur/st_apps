@@ -30,6 +30,11 @@ def login():
     contraseña = st.sidebar.text_input("Contraseña", type="password")
     ingresar = st.sidebar.button("Ingresar")
 
+    # Mostrar contenido en la parte principal
+    st.title("Bienvenido a la app")
+    st.write("Por favor, inicia sesión desde el panel lateral izquierdo.")
+    #st.image("logo.png", width=200)  # solo si tienes un logo o imagen
+
     if ingresar:
         if usuario in USUARIOS and contraseña == USUARIOS[usuario]:
             st.session_state["autenticado"] = True
