@@ -1,170 +1,52 @@
 import streamlit as st
-import gspread
-from google.oauth2.service_account import Credentials
-import json
-import os
 import datetime
 import pytz
-import re
+
+from auth import cargar_usuarios, login
+from ui_inicio import mostrar_bienvenida
+from sheets import conectar_google_sheets
+from formulario import mostrar_formulario
 
 st.set_page_config(page_title="Formulario de Registro", page_icon="📝")
 
-# --- Leer archivo secreto con usuarios y contraseñas ---
-USUARIOS_PATH = "/etc/secrets/USUARIOS_CONTRASENAS"
+USUARIOS = cargar_usuarios()
 
-if not os.path.exists(USUARIOS_PATH):
-    st.error("❌ Archivo de usuarios no encontrado.")
-    st.stop()
-
-try:
-    with open(USUARIOS_PATH) as f:
-        USUARIOS = json.load(f)
-except Exception as e:
-    st.error(f"❌ Error al leer archivo de usuarios: {e}")
-    st.stop()
-
-# --- Función para login ---
-def login():
-    st.sidebar.title("🔐 Ingreso de usuario")
-    usuario = st.sidebar.text_input("Usuario")
-    contraseña = st.sidebar.text_input("Contraseña", type="password")
-    ingresar = st.sidebar.button("Ingresar")
-
-    # Mostrar contenido en la parte principal
-    st.markdown(
-    """
-    <div style='text-align: center;'>
-        <img src='https://raw.githubusercontent.com/leocorbur/st_apps/refs/heads/main/images/logo_horizontal_morado.png' width='60%'/>
-    </div>
-    """,
-    unsafe_allow_html=True
-    )
-    #st.title("👋 Bienvenidos al Portal de Gestión de Vendedores Indirectos")
-    st.markdown("""
-        <h1 style='text-align: center; margin-bottom: 0.5em;'>👋 Bienvenidos al Portal de Gestión de Vendedores Indirectos</h1>
-            """, unsafe_allow_html=True)
-    
-    st.markdown("""
-        Este portal ha sido diseñado para facilitar la gestión de solicitudes relacionadas con vendedores indirectos.
-
-        **Desde aquí podrás:**
-
-        - Registrar nuevas solicitudes de alta de vendedores indirectos  
-        - Solicitar la baja de vendedores indirectos existentes  
-        - Hacer seguimiento al estado de tus solicitudes
-
-        Nuestro objetivo es ofrecerte una herramienta ágil y centralizada que simplifique tus gestiones y mejore la comunicación entre tu equipo y el nuestro.
-
-        Si tienes dudas o necesitas asistencia, **no dudes en contactarnos**.
-
-        ¡Gracias por tu colaboración!
-    """)
-    st.image("https://raw.githubusercontent.com/leocorbur/st_apps/refs/heads/main/images/logo_horizontal_morado.png", width=200) 
-
-    if ingresar:
-        if usuario in USUARIOS and contraseña == USUARIOS[usuario]:
-            st.session_state["autenticado"] = True
-            st.session_state["usuario"] = usuario
-            st.rerun()
-        else:
-            st.sidebar.error("❌ Usuario o contraseña incorrectos")
 
 # --- Comprobación de sesión ---
 if "autenticado" not in st.session_state:
     st.session_state["autenticado"] = False
 
 if not st.session_state["autenticado"]:
-    login()
+    mostrar_bienvenida()
+    login(USUARIOS)
     st.stop()
 
 
-SECRETO_PATH = "/etc/secrets/GOOGLE_CREDENTIALS"
-
-if not os.path.exists(SECRETO_PATH):
-    st.error("❌ No se encontró el archivo de credenciales.")
-    st.stop()
-
-try:
-    with open(SECRETO_PATH) as f:
-        credenciales_json = json.load(f)
-
-    creds = Credentials.from_service_account_info(credenciales_json, scopes=[
-        "https://www.googleapis.com/auth/spreadsheets",
-        "https://www.googleapis.com/auth/drive"
-    ])
-    client = gspread.authorize(creds)
-    sheet = client.open("maestra_vendedores").worksheet("colaboradores")
-except Exception as e:
-    st.error(f"⚠️ Error al conectar con Google Sheets: {e}")
-    st.stop()
+# Conectar y obtener la hoja
+hoja_colaboradores = conectar_google_sheets("maestra_vendedores", "colaboradores")
 
 
-st.title("📋 Formulario de Registro de Vendedores")
-
-with st.form("formulario_registro"):
-    tz = pytz.timezone("America/Lima")
-    etl_timestamp = datetime.datetime.now(tz).date()
-    etl_timestamp = str(etl_timestamp)
-    correo_backoffice = st.session_state["usuario"]
-    nombre_colaborador_agencia = st.text_input("Nombre colaborador")
-    tipo_documento = st.selectbox("Tipo documento:", ["DNI", "CE"])
-    numero_documento = st.text_input("Número documento")
-    correo = st.text_input("Correo electrónico")
-    celular = st.text_input("Celular")
-    cargo = st.selectbox("Cargo:", ["Backoffice", "Supervisor", "Vendedor"])
-    ubicacion_departamento = st.text_input("Ubicación departamento")
-    ubicacion_provincia	 = st.text_input("Ubicación provincia")
-    ubicacion_distrito = st.text_input("Ubicación distrito")
-    fecha_inicio = st.date_input("Fecha de inicio", value=datetime.date.today())
-    fecha_inicio =  str(fecha_inicio)
-                                 
-    
-    
-
-    submitted = st.form_submit_button("Enviar")
-
-    if submitted:
-        if not numero_documento.isdigit() or len(numero_documento) != 8:
-            st.error("❌ El número de documento debe contener solo números y 8 dígitos.")
-        elif not re.match(r"[^@]+@[^@]+\.[^@]+", correo):
-            st.error("❌ El correo electrónico no tiene un formato válido.")
-        elif not celular.isdigit() or len(celular) != 9 or not celular.startswith("9"):
-            st.error("❌ El número de celular debe tener 9 dígitos y empezar con 9.")
-        else:
-            campos = [
-                nombre_colaborador_agencia,
-                tipo_documento,
-                numero_documento,
-                correo,
-                celular,
-                cargo,
-                ubicacion_departamento,
-                ubicacion_provincia,
-                ubicacion_distrito,
-                fecha_inicio
-            ]
-    
-            if all(campos):
-                try:
-                    sheet.append_row([
-                        etl_timestamp,
-                        correo_backoffice,
-                        nombre_colaborador_agencia,
-                        tipo_documento,
-                        numero_documento,
-                        correo,
-                        celular,
-                        cargo,
-                        ubicacion_departamento,
-                        ubicacion_provincia,
-                        ubicacion_distrito,
-                        fecha_inicio
-                    ])
-                    st.success("✅ Datos enviados correctamente.")
-                except Exception as e:
-                    st.error(f"❌ Error al guardar datos: {e}")
-            else:
-                st.warning("⚠ Por favor completa todos los campos antes de enviar.")
+# Mostrar formulario y guardar si es válido
+datos = mostrar_formulario()
+if datos:
+    try:
+        hoja_colaboradores.append_row([
+            datos["etl_timestamp"],
+            datos["correo_backoffice"],
+            datos["nombre_colaborador_agencia"],
+            datos["tipo_documento"],
+            datos["numero_documento"],
+            datos["correo"],
+            datos["celular"],
+            datos["cargo"],
+            datos["ubicacion_departamento"],
+            datos["ubicacion_provincia"],
+            datos["ubicacion_distrito"],
+            datos["fecha_inicio"]
+        ])
+        st.success("✅ Datos enviados correctamente.")
+    except Exception as e:
+        st.error(f"❌ Error al guardar datos: {e}")
             
 
 # Mostrar los datos actuales de la hoja
@@ -172,7 +54,7 @@ st.subheader("📄 Datos registrados")
 
 try:
     # Obtiene todas las filas como lista de diccionarios
-    registros = sheet.get_all_records()
+    registros = hoja_colaboradores.get_all_records()
     
     if registros:
         # Mostrar como DataFrame
@@ -180,7 +62,7 @@ try:
         df = pd.DataFrame(registros)
 
         # Filtrar por el correo del usuario logueado
-        #correo_usuario = st.session_state["usuario"]  # debe ser un correo
+        correo_backoffice = st.session_state["usuario"]  # debe ser un correo
         df_usuario = df[df["correo_backoffice"] == correo_backoffice]
 
         st.dataframe(df_usuario, use_container_width=True)
@@ -205,8 +87,8 @@ try:
                 fecha_baja = datetime.datetime.now(tz).strftime("%Y-%m-%d")
 
                 # Actualizar columnas en la hoja (sumar 2 porque .get_all_records() ignora encabezado)
-                sheet.update_cell(index_global + 2, df.columns.get_loc("fecha_baja") + 1, fecha_baja)
-                sheet.update_cell(index_global + 2, df.columns.get_loc("motivo_baja") + 1, motivo_baja)
+                hoja_colaboradores.update_cell(index_global + 2, df.columns.get_loc("fecha_baja") + 1, fecha_baja)
+                hoja_colaboradores.update_cell(index_global + 2, df.columns.get_loc("motivo_baja") + 1, motivo_baja)
 
                 st.success(f"✅ {seleccionado} fue dado de baja correctamente.")
                 
