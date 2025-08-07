@@ -4,13 +4,12 @@ import datetime
 import pytz
 import re
 
-def mostrar_formulario():
+def mostrar_formulario(correo_backoffice):
     st.title("📋 Formulario de Registro de Vendedores")
 
     with st.form("formulario_registro"):
         tz = pytz.timezone("America/Lima")
         etl_timestamp = str(datetime.datetime.now(tz).date())
-        correo_backoffice = st.session_state["usuario"]
 
         nombre_colaborador_agencia = st.text_input("Nombre colaborador")
         tipo_documento = st.selectbox("Tipo documento:", ["DNI", "CE"])
