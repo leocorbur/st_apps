@@ -26,9 +26,17 @@ def login(usuarios: dict):
     ingresar = st.sidebar.button("Ingresar")
 
     if ingresar:
-        if usuario in usuarios and contraseña == usuarios[usuario]:
-            st.session_state["autenticado"] = True
-            st.session_state["usuario"] = usuario
-            st.rerun()
+        datos_usuario = usuarios.get(usuario)
+        if datos_usuario and datos_usuario.get("password") == contraseña:
+            if datos_usuario.get("estado") == "activo":
+                st.session_state["autenticado"] = True
+                st.session_state["usuario"] = usuario
+                st.session_state["rol"] = datos_usuario.get("rol")
+                st.session_state["distribuidor"] = datos_usuario.get("distribuidor", "")
+                st.session_state["supervisor"] = datos_usuario.get("supervisor", "")
+                st.success("✅ Ingreso exitoso")
+                st.rerun()
         else:
-            st.sidebar.error("❌ Usuario o contraseña incorrectos")
+            st.sidebar.error("❌ Usuario inactivo")
+    else:
+        st.sidebar.error("❌ Usuario o contraseña incorrectos")
