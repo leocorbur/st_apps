@@ -36,7 +36,7 @@ def login(usuarios: dict):
                 st.session_state["supervisor"] = datos_usuario.get("supervisor", "")
                 st.success("✅ Ingreso exitoso")
                 st.rerun()
+            else:
+                st.sidebar.error("❌ Usuario o contraseña incorrectos")
         else:
-            st.sidebar.error("❌ Usuario inactivo")
-    else:
-        st.sidebar.error("❌ Usuario o contraseña incorrectos")
+            st.sidebar.error("❌ Usuario o contraseña incorrectos")
