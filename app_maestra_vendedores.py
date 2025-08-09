@@ -55,7 +55,7 @@ if rol_usuario == "backoffice":
             
 
 # Mostrar los datos actuales de la hoja
-df, df_usuario = mostrar_tabla(hoja_colaboradores, correo_usuario, rol_usuario, USUARIOS)
+df, df_usuario = mostrar_tabla_por_rol(hoja_colaboradores, correo_usuario, rol_usuario, USUARIOS)
 
 
 if df is not None and df_usuario is not None:
