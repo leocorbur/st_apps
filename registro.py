@@ -3,6 +3,26 @@ import pandas as pd
 import datetime
 import pytz
 
+
+
+def filtrar_por_rol(df, usuario, rol, usuarios):
+    if rol == "backoffice":
+        return df[df["correo_backoffice"] == usuario]
+
+    if rol == "supervisor":
+        backoffices_asignados = [
+            u for u, info in usuarios.items()
+            if info.get("rol") == "backoffice" and info.get("supervisor") == usuario
+        ]
+        return df[df["correo_backoffice"].isin(backoffices_asignados)]
+
+    if rol == "principal":
+        return df
+
+    return pd.DataFrame()  # vacío si rol desconocido
+
+
+
 def mostrar_tabla(hoja_colaboradores, correo_backoffice):
     """Muestra los registros del usuario autenticado"""
     st.subheader("📄 Datos registrados")
@@ -22,6 +42,25 @@ def mostrar_tabla(hoja_colaboradores, correo_backoffice):
         st.error(f"⚠️ Error al obtener datos: {e}")
         return None, None
 
+
+def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
+    """Muestra los registros filtrados según rol"""
+    st.subheader("📄 Datos registrados")
+    try:
+        registros = hoja_colaboradores.get_all_records()
+        if not registros:
+            st.info("Aún no hay registros en la hoja.")
+            return None, None
+
+        df = pd.DataFrame(registros)
+        df_usuario = filtrar_por_rol(df, usuario, rol, usuarios)
+
+        st.dataframe(df_usuario, use_container_width=True)
+        return df, df_usuario
+
+    except Exception as e:
+        st.error(f"⚠️ Error al obtener datos: {e}")
+        return None, None
 
 
 def dar_de_baja(df, df_usuario, hoja_colaboradores, correo_backoffice):
