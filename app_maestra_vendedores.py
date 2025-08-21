@@ -6,7 +6,7 @@ from sheets import conectar_google_sheets
 from formulario import mostrar_formulario
 from registro import mostrar_tabla, dar_de_baja, mostrar_tabla_por_rol
 
-st.set_page_config(page_title="Formulario de Registro", page_icon="📝")
+st.set_page_config(page_title="Formulario de Registro", page_icon="📝",layout="wide")
 
 USUARIOS = cargar_usuarios()
 
