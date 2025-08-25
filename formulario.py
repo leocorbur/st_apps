@@ -19,7 +19,6 @@ def mostrar_formulario(correo_backoffice):
         cargo = st.selectbox("Cargo:", ["Backoffice", "Supervisor", "Vendedor"])
         ubicacion_departamento = st.text_input("Ubicación departamento")
         ubicacion_provincia = st.text_input("Ubicación provincia")
-        ubicacion_distrito = st.text_input("Ubicación distrito")
         fecha_inicio = str(st.date_input("Fecha de inicio", value=datetime.date.today()))
         submitted = st.form_submit_button("Enviar")
 
@@ -40,7 +39,6 @@ def mostrar_formulario(correo_backoffice):
                 cargo,
                 ubicacion_departamento,
                 ubicacion_provincia,
-                ubicacion_distrito,
                 fecha_inicio
             ]
 
@@ -56,7 +54,6 @@ def mostrar_formulario(correo_backoffice):
                     "cargo": cargo,
                     "ubicacion_departamento": ubicacion_departamento,
                     "ubicacion_provincia": ubicacion_provincia,
-                    "ubicacion_distrito": ubicacion_distrito,
                     "fecha_inicio": fecha_inicio
                 }
             else:
