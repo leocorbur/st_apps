@@ -48,7 +48,6 @@ if rol_usuario == "backoffice":
                 datos["cargo"],
                 datos["ubicacion_departamento"],
                 datos["ubicacion_provincia"],
-                datos["ubicacion_distrito"],
                 datos["fecha_inicio"]
             ])
             st.success("✅ Datos enviados correctamente.")
