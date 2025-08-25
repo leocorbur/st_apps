@@ -27,17 +27,19 @@ hoja_colaboradores = conectar_google_sheets("maestra_vendedores", "colaboradores
 # Datos de sesión
 correo_usuario = st.session_state["usuario"]
 rol_usuario = st.session_state["rol"]
+distribuidor_usuario = st.session_state["distribuidor"]
 
 
 
 # Mostrar formulario y guardar si es válido
 if rol_usuario == "backoffice":
-    datos = mostrar_formulario(correo_usuario)
+    datos = mostrar_formulario(correo_usuario, distribuidor_usuario)
     if datos:
         try:
             hoja_colaboradores.append_row([
                 datos["etl_timestamp"],
                 datos["correo_backoffice"],
+                datos["distribuidor"],
                 datos["nombre_colaborador_agencia"],
                 datos["tipo_documento"],
                 datos["numero_documento"],

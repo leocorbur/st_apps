@@ -4,7 +4,7 @@ import datetime
 import pytz
 import re
 
-def mostrar_formulario(correo_backoffice):
+def mostrar_formulario(correo_backoffice,distribuidor_usuario):
     st.title("📋 Formulario de Registro de Vendedores")
 
     with st.form("formulario_registro"):
@@ -46,6 +46,7 @@ def mostrar_formulario(correo_backoffice):
                 return {
                     "etl_timestamp": etl_timestamp,
                     "correo_backoffice": correo_backoffice,
+                    "distribuidor": distribuidor_usuario,
                     "nombre_colaborador_agencia": nombre_colaborador_agencia,
                     "tipo_documento": tipo_documento,
                     "numero_documento": numero_documento,
