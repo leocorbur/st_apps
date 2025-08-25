@@ -133,3 +133,33 @@ def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice):
 
             st.success(f"✅ Departamento y provincia actualizado.")
 
+
+def blacklist(df_usuario, hoja_colaboradores):
+    """Permite marcar a un usuario en la blacklist"""
+    st.markdown("---")
+    st.subheader("Marca a usuario en la blacklist")
+
+    df_usuario_ = df_usuario[df_usuario["blacklist"] == ""]
+    nombres_disponibles = df_usuario_["nombre_colaborador_agencia"].tolist()
+
+    seleccionado = st.selectbox("Selecciona al colaborador para la blacklist:", nombres_disponibles)
+
+    opcion_si = st.selectbox(
+        "¿Confirmas la selección?",
+        ["Selecciona...", "Si"]
+    )
+
+    if st.button("Actualizar"):
+        if opcion_si != "Si":
+            st.warning("⚠️ Por favor marcar la opción correctamente.")
+        else:
+            index_global = df_usuario[
+                (df_usuario["nombre_colaborador_agencia"] == seleccionado)
+            ].index[0]
+
+        hoja_colaboradores.update_cell(index_global + 2, df_usuario.columns.get_loc("blacklist") + 1, opcion_si)
+
+        st.success(f"✅Colaborador enviado a la blacklist.")
+
+
+

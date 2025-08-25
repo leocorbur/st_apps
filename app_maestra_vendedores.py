@@ -4,7 +4,7 @@ from auth import cargar_usuarios, login
 from ui_inicio import mostrar_bienvenida
 from sheets import conectar_google_sheets
 from formulario import mostrar_formulario
-from registro import dar_de_baja, mostrar_tabla_por_rol, editar_registros
+from registro import dar_de_baja, mostrar_tabla_por_rol, editar_registros, blacklist
 
 st.set_page_config(page_title="Formulario de Registro", page_icon="📝",layout="wide")
 
@@ -66,3 +66,8 @@ if df is not None and df_usuario is not None:
 if df is not None and df_usuario is not None:
     if rol_usuario == "backoffice":
         dar_de_baja(df, df_usuario, hoja_colaboradores, correo_usuario)
+
+# Supervisores
+if df is not None and df_usuario is not None:
+    if rol_usuario == "supervisor":
+        blacklist(df_usuario, hoja_colaboradores )
