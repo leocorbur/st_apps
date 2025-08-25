@@ -16,7 +16,7 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario):
         numero_documento = st.text_input("Número documento")
         correo = st.text_input("Correo electrónico")
         celular = st.text_input("Celular")
-        cargo = st.selectbox("Cargo:", ["Backoffice", "Supervisor", "Vendedor"])
+        cargo = st.selectbox("Cargo:", ["Backoffice", "Supervisor", "Vendedor", "Freelance"])
         ubicacion_departamento = st.text_input("Ubicación departamento")
         ubicacion_provincia = st.text_input("Ubicación provincia")
         fecha_inicio = str(st.date_input("Fecha de inicio", value=datetime.date.today()))
