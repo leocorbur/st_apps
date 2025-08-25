@@ -98,3 +98,38 @@ def dar_de_baja(df, df_usuario, hoja_colaboradores, correo_backoffice):
 
             st.success(f"✅ {seleccionado} fue dado de baja correctamente.")
 
+
+def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice):
+    """Permite seleccionar y editar a un colaborador"""
+    st.markdown("---")
+    st.subheader("Editar el departamento y provincia de un colaborador")
+
+    if "fecha_baja" not in df.columns or "motivo_baja" not in df.columns:
+        st.warning("⚠️ Las columnas 'fecha_baja' y 'motivo_baja' no existen en la hoja.")
+        return
+    
+    df_usuario_activos = df_usuario[df_usuario["fecha_baja"] == ""]
+    nombres_disponibles = df_usuario_activos["nombre_colaborador_agencia"].tolist()
+
+    if not nombres_disponibles:
+        st.info("✅ Todos los colaboradores están de baja.")
+        return
+
+    seleccionado = st.selectbox("Selecciona al colaborador a editar:", nombres_disponibles)
+    departamento = st.text_input("Departamento")
+    provincia = st.text_input("Provincia")
+
+    if st.button("Actualizar"):
+        if departamento.strip() == "" and provincia.strip() == "":
+            st.warning("⚠️ Por favor ingresa departamento y provincia.")
+        else:
+            index_global = df[
+                (df["correo_backoffice"] == correo_backoffice) &
+                (df["nombre_colaborador_agencia"] == seleccionado)
+            ]
+
+            hoja_colaboradores.update_cell(index_global + 2, df.columns.get_loc("ubicacion_departamento") + 1, departamento)
+            hoja_colaboradores.update_cell(index_global + 2, df.columns.get_loc("ubicacion_provincia") + 1, provincia)
+
+            st.success(f"✅ Departamento y provincia actualizado.")
+

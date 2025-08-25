@@ -4,7 +4,7 @@ from auth import cargar_usuarios, login
 from ui_inicio import mostrar_bienvenida
 from sheets import conectar_google_sheets
 from formulario import mostrar_formulario
-from registro import mostrar_tabla, dar_de_baja, mostrar_tabla_por_rol
+from registro import dar_de_baja, mostrar_tabla_por_rol, editar_registros
 
 st.set_page_config(page_title="Formulario de Registro", page_icon="📝",layout="wide")
 
@@ -57,6 +57,10 @@ if rol_usuario == "backoffice":
 # Mostrar los datos actuales de la hoja
 df, df_usuario = mostrar_tabla_por_rol(hoja_colaboradores, correo_usuario, rol_usuario, USUARIOS)
 
+
+if df is not None and df_usuario is not None:
+    if rol_usuario == "backoffice":
+        editar_registros(df, df_usuario, hoja_colaboradores, correo_usuario)
 
 if df is not None and df_usuario is not None:
     if rol_usuario == "backoffice":
