@@ -122,7 +122,7 @@ def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice):
 
     if st.button("Actualizar"):
         if not departamento.strip() or not provincia.strip() or not cargo.strip():
-            st.warning("⚠️ Por favor ingresa departamento y provincia.")
+            st.warning("⚠️ Por favor ingresar datos completos.")
         else:
             index_global = df[
                 (df["correo_backoffice"] == correo_backoffice) &
@@ -132,7 +132,7 @@ def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice):
             hoja_colaboradores.update_cell(index_global + 2, df.columns.get_loc("ubicacion_departamento") + 1, departamento)
             hoja_colaboradores.update_cell(index_global + 2, df.columns.get_loc("ubicacion_provincia") + 1, provincia)
 
-            st.success(f"✅ Departamento y provincia actualizado.")
+            st.success(f"✅ Datos actualizados.")
 
 
 def blacklist(df_usuario, hoja_colaboradores):
