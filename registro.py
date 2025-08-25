@@ -120,13 +120,13 @@ def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice):
     provincia = st.text_input("Provincia")
 
     if st.button("Actualizar"):
-        if departamento.strip() == "" and provincia.strip() == "":
+        if not departamento.strip() or not provincia.strip():
             st.warning("⚠️ Por favor ingresa departamento y provincia.")
         else:
             index_global = df[
                 (df["correo_backoffice"] == correo_backoffice) &
                 (df["nombre_colaborador_agencia"] == seleccionado)
-            ]
+            ].index[0]
 
             hoja_colaboradores.update_cell(index_global + 2, df.columns.get_loc("ubicacion_departamento") + 1, departamento)
             hoja_colaboradores.update_cell(index_global + 2, df.columns.get_loc("ubicacion_provincia") + 1, provincia)
