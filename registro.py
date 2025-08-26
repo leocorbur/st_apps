@@ -157,7 +157,10 @@ def blacklist(df_usuario, hoja_colaboradores):
             index_global = df_usuario[
                 (df_usuario["nombre_colaborador_agencia"] == seleccionado)
             ].index[0]
+        
+        fecha_blacklist = datetime.datetime.now(pytz.timezone("America/Lima")).strftime("%Y-%m-%d")
 
+        hoja_colaboradores.update_cell(index_global + 2, df_usuario.columns.get_loc("fecha_blacklist") + 1, fecha_blacklist)
         hoja_colaboradores.update_cell(index_global + 2, df_usuario.columns.get_loc("blacklist") + 1, opcion_si)
 
         st.success(f"✅Colaborador enviado a la blacklist.")
