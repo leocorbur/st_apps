@@ -30,47 +30,68 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradore
     ]
 
     if submitted:
+        # --- Validación número documento ---
         if not numero_documento.isdigit() or len(numero_documento) != 8:
             st.error("❌ El número de documento debe contener solo números y 8 dígitos.")
-        elif not re.match(r"[^@]+@[^@]+\.[^@]+", correo):
+            return None
+        # --- Validación correo ---
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", correo):
             st.error("❌ El correo electrónico no tiene un formato válido.")
+            return None
+        
+        dominio = correo.split("@")[-1].lower()
+        if dominio not in dominios_permitidos:
+            st.error("❌ Solo se permiten correos corporativos.")
+            return None
+
+        # --- Validación celular ---
+        if not celular.isdigit() or len(celular) != 9 or not celular.startswith("9"):
+            st.error("❌ El número de celular debe tener 9 dígitos y empezar con 9.")
+            return None
+        
+        # --- Validación DNI ---
+        estado_dni = validacion_dni(hoja_colaboradores, numero_documento)
+        if estado_dni == "activo":
+            st.error("❌ El número de documento ya está ACTIVO, no se puede registrar.")
+            return None
+        if estado_dni == "observado":
+            st.error("❌ El número de documento está en OBSERVACIÓN, no se puede registrar.")
+            return None
+        if estado_dni == "baja":
+            st.warning("⚠ El número documento estuvo dado de baja recientemente")
+            return None
+        if estado_dni == "error":
+            st.error("⚠ Error al validar el documento.")
+            return None
+
+        # --- Si pasó todas las validaciones ---
+
+        campos = [
+            nombre_colaborador_agencia,
+            tipo_documento,
+            numero_documento,
+            correo,
+            celular,
+            cargo,
+            ubicacion_departamento,
+            ubicacion_provincia,
+            fecha_inicio
+        ]
+
+        if all(campos):
+            return {
+                "etl_timestamp": etl_timestamp,
+                "correo_backoffice": correo_backoffice,
+                "distribuidor": distribuidor_usuario,
+                "nombre_colaborador_agencia": nombre_colaborador_agencia,
+                "tipo_documento": tipo_documento,
+                "numero_documento": numero_documento,
+                "correo": correo,
+                "celular": celular,
+                "cargo": cargo,
+                "ubicacion_departamento": ubicacion_departamento,
+                "ubicacion_provincia": ubicacion_provincia,
+                "fecha_inicio": fecha_inicio
+            }
         else:
-            dominio = correo.split("@")[-1].lower()
-            if dominio not in dominios_permitidos:
-                st.error("❌ Solo se permiten correos corporativos.")
-            elif not celular.isdigit() or len(celular) != 9 or not celular.startswith("9"):
-                st.error("❌ El número de celular debe tener 9 dígitos y empezar con 9.")
-            else:
-                validacion_dni(hoja_colaboradores, numero_documento)
-
-                campos = [
-                    nombre_colaborador_agencia,
-                    tipo_documento,
-                    numero_documento,
-                    correo,
-                    celular,
-                    cargo,
-                    ubicacion_departamento,
-                    ubicacion_provincia,
-                    fecha_inicio
-                ]
-
-                if all(campos):
-                    return {
-                        "etl_timestamp": etl_timestamp,
-                        "correo_backoffice": correo_backoffice,
-                        "distribuidor": distribuidor_usuario,
-                        "nombre_colaborador_agencia": nombre_colaborador_agencia,
-                        "tipo_documento": tipo_documento,
-                        "numero_documento": numero_documento,
-                        "correo": correo,
-                        "celular": celular,
-                        "cargo": cargo,
-                        "ubicacion_departamento": ubicacion_departamento,
-                        "ubicacion_provincia": ubicacion_provincia,
-                        "fecha_inicio": fecha_inicio
-                    }
-                else:
-                    st.warning("⚠ Por favor completa todos los campos antes de enviar.")
-
-    return None
+            st.warning("⚠ Por favor completa todos los campos antes de enviar.")
