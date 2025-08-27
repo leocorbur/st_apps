@@ -76,7 +76,7 @@ def dar_de_baja(df, df_usuario, hoja_colaboradores, correo_backoffice):
     nombres_disponibles = df_usuario_activos["nombre_colaborador_agencia"].tolist()
 
     if not nombres_disponibles:
-        st.info("✅ Todos los colaboradores ya fueron dados de baja.")
+        st.info("")
         return
 
     seleccionado = st.selectbox("Selecciona al colaborador a dar de baja:", nombres_disponibles)
@@ -112,7 +112,7 @@ def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice):
     nombres_disponibles = df_usuario_activos["nombre_colaborador_agencia"].tolist()
 
     if not nombres_disponibles:
-        st.info("✅ Todos los colaboradores están de baja.")
+        st.info("")
         return
 
     seleccionado = st.selectbox("Selecciona al colaborador a editar:", nombres_disponibles)
