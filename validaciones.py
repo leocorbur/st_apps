@@ -9,6 +9,8 @@ def validacion_dni(hoja_colaboradores, numero_documento):
 
     sheet = hoja_colaboradores.get_all_records()
     df = pd.DataFrame(sheet)
+    
+    df["numero_documento"] = df["numero_documento"].astype(str).str.zfill(8)
 
     tz = pytz.timezone("America/Lima")
     hoy = datetime.datetime.now(tz).date()
