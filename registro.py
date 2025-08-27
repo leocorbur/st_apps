@@ -7,7 +7,7 @@ import pytz
 
 def filtrar_por_rol(df, usuario, rol, usuarios):
     if rol == "backoffice":
-        return df[df["correo_backoffice"] == usuario]
+        return df[df["correo_backoffice"] == usuario].drop(columns=["fecha_blacklist", "blacklist"])
 
     if rol == "supervisor":
         backoffices_asignados = [
