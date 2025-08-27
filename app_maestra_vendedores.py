@@ -33,7 +33,7 @@ distribuidor_usuario = st.session_state["distribuidor"]
 
 # Mostrar formulario y guardar si es válido
 if rol_usuario == "backoffice":
-    datos = mostrar_formulario(correo_usuario, distribuidor_usuario)
+    datos = mostrar_formulario(correo_usuario, distribuidor_usuario, hoja_colaboradores)
     if datos:
         try:
             hoja_colaboradores.append_row([

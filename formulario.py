@@ -4,7 +4,9 @@ import datetime
 import pytz
 import re
 
-def mostrar_formulario(correo_backoffice,distribuidor_usuario):
+from validaciones import validacion_dni
+
+def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradores):
     st.title("📋 Formulario de Registro de Vendedores")
 
     with st.form("formulario_registro"):
@@ -39,6 +41,8 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario):
             elif not celular.isdigit() or len(celular) != 9 or not celular.startswith("9"):
                 st.error("❌ El número de celular debe tener 9 dígitos y empezar con 9.")
             else:
+                validacion_dni(hoja_colaboradores, numero_documento)
+
                 campos = [
                     nombre_colaborador_agencia,
                     tipo_documento,
