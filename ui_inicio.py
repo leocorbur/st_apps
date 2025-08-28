@@ -31,3 +31,4 @@ def mostrar_bienvenida():
         ¡Gracias por tu colaboración!
     """)
     st.image("https://raw.githubusercontent.com/leocorbur/st_apps/refs/heads/main/images/logo_horizontal_morado.png", width=200) 
+    st.video("https://raw.githubusercontent.com/leocorbur/st_apps/main/images/wowi.mp4")
