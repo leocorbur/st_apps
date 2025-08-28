@@ -31,4 +31,13 @@ def mostrar_bienvenida():
         ¡Gracias por tu colaboración!
     """)
     st.image("https://raw.githubusercontent.com/leocorbur/st_apps/refs/heads/main/images/logo_horizontal_morado.png", width=200) 
-    st.video("https://raw.githubusercontent.com/leocorbur/st_apps/main/images/wowi.mp4")
+    
+    st.markdown(
+    """
+    <video width="600" autoplay muted controls>
+        <source src="https://raw.githubusercontent.com/leocorbur/st_apps/main/images/wowi.mp4" type="video/mp4">
+        Tu navegador no soporta video HTML5.
+    </video>
+    """,
+    unsafe_allow_html=True
+)
