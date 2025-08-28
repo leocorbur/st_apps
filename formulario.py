@@ -41,7 +41,7 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradore
             return None
         
         dominio = correo.split("@")[-1].lower()
-        if dominio not in dominios_permitidos:
+        if dominio not in dominios_permitidos and cargo != "Freelance":
             st.error("❌ Solo se permiten correos corporativos.")
             return None
 
