@@ -9,6 +9,8 @@ from validaciones import validacion_dni
 
 def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradores, hoja_ubicaciones):
 
+    st.title("📋 Formulario de Registro de Vendedores")
+
     ubicaciones = hoja_ubicaciones.get_all_records()
     df_ubicaciones = pd.DataFrame(ubicaciones)
     ubicacion_departamento = st.selectbox(
@@ -22,8 +24,6 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradore
         options=provincias
     )
     
-
-    st.title("📋 Formulario de Registro de Vendedores")
 
     with st.form("formulario_registro"):
         tz = pytz.timezone("America/Lima")
