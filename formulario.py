@@ -27,7 +27,8 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradore
 
         ubicacion_departamento = st.selectbox(
             "Ubicación departamento",
-            options=df_ubicaciones["DEPARTAMENTO"].unique()
+            options=df_ubicaciones["DEPARTAMENTO"].unique(),
+            key="departamento"
         )
         provincias = df_ubicaciones[df_ubicaciones["DEPARTAMENTO"]==ubicacion_departamento]["PROVINCIA"].unique()
 
