@@ -33,7 +33,8 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradore
 
         ubicacion_provincia = st.selectbox(
             "Ubicación provincia",
-            options=provincias
+            options=provincias,
+            key=f"provincia_{ubicacion_departamento}" # clave dinámica para forzar refresco
         )
 
         fecha_inicio = str(st.date_input("Fecha de inicio", value=datetime.date.today()))
