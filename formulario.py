@@ -12,6 +12,17 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradore
     ubicaciones = hoja_ubicaciones.get_all_records()
     df_ubicaciones = pd.DataFrame(ubicaciones)
 
+    # Si no existe, inicializamos
+    if "departamento" not in st.session_state:
+        st.session_state.departamento = None
+    if "provincia" not in st.session_state:
+        st.session_state.provincia = None
+
+    
+# Callback para resetear provincia cuando cambie el departamento
+    def reset_provincia():
+        st.session_state.provincia = None
+
     st.title("📋 Formulario de Registro de Vendedores")
 
     with st.form("formulario_registro"):
@@ -28,14 +39,16 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradore
         ubicacion_departamento = st.selectbox(
             "Ubicación departamento",
             options=df_ubicaciones["DEPARTAMENTO"].unique(),
-            key="departamento"
+            key="departamento",
+            on_change=reset_provincia
+
         )
         provincias = df_ubicaciones[df_ubicaciones["DEPARTAMENTO"]==ubicacion_departamento]["PROVINCIA"].unique()
 
         ubicacion_provincia = st.selectbox(
             "Ubicación provincia",
             options=provincias,
-            key=f"provincia_{ubicacion_departamento}" # clave dinámica para forzar refresco
+            index=0
         )
 
         fecha_inicio = str(st.date_input("Fecha de inicio", value=datetime.date.today()))
