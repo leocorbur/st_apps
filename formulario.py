@@ -11,6 +11,16 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradore
 
     ubicaciones = hoja_ubicaciones.get_all_records()
     df_ubicaciones = pd.DataFrame(ubicaciones)
+    ubicacion_departamento = st.selectbox(
+    "Ubicación departamento",
+    options=df_ubicaciones["DEPARTAMENTO"].unique()
+    )
+    provincias = df_ubicaciones[df_ubicaciones["DEPARTAMENTO"]==ubicacion_departamento]["PROVINCIA"].unique()
+
+    ubicacion_provincia = st.selectbox(
+        "Ubicación provincia",
+        options=provincias
+    )
     
 
     st.title("📋 Formulario de Registro de Vendedores")
@@ -26,18 +36,7 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradore
         celular = st.text_input("Celular")
         cargo = st.selectbox("Cargo:", ["Backoffice", "Supervisor", "Vendedor", "Freelance"])
 
-        ubicacion_departamento = st.selectbox(
-            "Ubicación departamento",
-            options=df_ubicaciones["DEPARTAMENTO"].unique()
 
-        )
-        provincias = df_ubicaciones[df_ubicaciones["DEPARTAMENTO"]==ubicacion_departamento]["PROVINCIA"].unique()
-
-        ubicacion_provincia = st.selectbox(
-            "Ubicación provincia",
-            options=provincias,
-            index=0
-        )
 
         fecha_inicio = str(st.date_input("Fecha de inicio", value=datetime.date.today()))
         submitted = st.form_submit_button("Enviar")
