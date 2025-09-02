@@ -24,6 +24,8 @@ if not st.session_state["autenticado"]:
 # Conectar y obtener la hoja
 hoja_colaboradores = conectar_google_sheets("maestra_vendedores", "colaboradores")
 
+hoja_ubicaciones = conectar_google_sheets("maestra_vendedores", "ubicaciones")
+
 # Datos de sesión
 correo_usuario = st.session_state["usuario"]
 rol_usuario = st.session_state["rol"]
@@ -33,7 +35,7 @@ distribuidor_usuario = st.session_state["distribuidor"]
 
 # Mostrar formulario y guardar si es válido
 if rol_usuario == "backoffice":
-    datos = mostrar_formulario(correo_usuario, distribuidor_usuario, hoja_colaboradores)
+    datos = mostrar_formulario(correo_usuario, distribuidor_usuario, hoja_colaboradores, hoja_ubicaciones)
     if datos:
         try:
             hoja_colaboradores.append_row([

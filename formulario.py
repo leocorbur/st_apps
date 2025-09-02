@@ -1,12 +1,17 @@
 
 import streamlit as st
+import pandas as pd
 import datetime
 import pytz
 import re
 
 from validaciones import validacion_dni
 
-def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradores):
+def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradores, hoja_ubicaciones):
+
+    ubicaciones = hoja_ubicaciones.get_all_records()
+    df_ubicaciones = pd.DataFrame(ubicaciones)
+
     st.title("📋 Formulario de Registro de Vendedores")
 
     with st.form("formulario_registro"):
@@ -19,8 +24,18 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradore
         correo = st.text_input("Correo electrónico")
         celular = st.text_input("Celular")
         cargo = st.selectbox("Cargo:", ["Backoffice", "Supervisor", "Vendedor", "Freelance"])
-        ubicacion_departamento = st.text_input("Ubicación departamento")
-        ubicacion_provincia = st.text_input("Ubicación provincia")
+
+        ubicacion_departamento = st.selectbox(
+            "Ubicación departamento",
+            options=df_ubicaciones["DEPARTAMENTO"].unique()
+        )
+        provincias = df_ubicaciones[df_ubicaciones["DEPARTAMENTO"]==ubicacion_departamento]["PROVINCIA"].unique()
+
+        ubicacion_provincia = st.selectbox(
+            "Ubicación provincia",
+            options=provincias
+        )
+
         fecha_inicio = str(st.date_input("Fecha de inicio", value=datetime.date.today()))
         submitted = st.form_submit_button("Enviar")
 
