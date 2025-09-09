@@ -60,11 +60,16 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
                 .reset_index()
             )
 
-            st.subheader("📊 Colaboradores por Departamento")
-            st.dataframe(resumen_departamento, use_container_width=True)
+            col1, col2 = st.columns(2)
 
-            st.subheader("📊 Resumen por Distribuidor")
-            st.dataframe(resumen_distribuidor, use_container_width=True)
+            with col1:
+                st.subheader("📊 Colaboradores por Departamento")
+                st.dataframe(resumen_departamento, use_container_width=True)
+
+            with col2:
+                st.subheader("📊 Resumen por Distribuidor")
+                st.dataframe(resumen_distribuidor, use_container_width=True)
+
 
 
         return df, df_usuario
