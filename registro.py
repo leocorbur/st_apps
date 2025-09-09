@@ -40,7 +40,7 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
         if rol == "principal":
             # Filtrar según tus reglas de fecha_baja y fecha_blacklist
             df_filtrado = df[
-                (df["fecha_baja"].isna() | (df["fecha_baja"] == "")) |
+                (df["fecha_baja"].isna() | (df["fecha_baja"] == "")) &
                 (df["fecha_blacklist"].isna() | (df["fecha_blacklist"] == ""))
             ]
 
