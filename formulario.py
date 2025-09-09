@@ -37,7 +37,7 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradore
         numero_documento = st.text_input("Número documento")
         correo = st.text_input("Correo electrónico")
         celular = st.text_input("Celular")
-        cargo = st.selectbox("Cargo:", ["Backoffice", "Supervisor", "Vendedor", "Freelance", "Dueño", "Formador"])
+        cargo = st.selectbox("Cargo:", ["Backoffice", "Supervisor", "Vendedor", "Freelance", "Dueño", "Formador", "Digital"])
 
 
 
