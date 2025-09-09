@@ -22,27 +22,6 @@ def filtrar_por_rol(df, usuario, rol, usuarios):
     return pd.DataFrame()  # vacío si rol desconocido
 
 
-
-def mostrar_tabla(hoja_colaboradores, correo_backoffice):
-    """Muestra los registros del usuario autenticado"""
-    st.subheader("📄 Datos registrados")
-    try:
-        registros = hoja_colaboradores.get_all_records()
-        if not registros:
-            st.info("Aún no hay registros en la hoja.")
-            return None, None
-
-        df = pd.DataFrame(registros)
-        df_usuario = df[df["correo_backoffice"] == correo_backoffice]
-
-        st.dataframe(df_usuario, use_container_width=True)
-        return df, df_usuario
-
-    except Exception as e:
-        st.error(f"⚠️ Error al obtener datos: {e}")
-        return None, None
-
-
 def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
     """Muestra los registros filtrados según rol"""
     st.subheader("📄 Datos registrados")
@@ -56,6 +35,38 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
         df_usuario = filtrar_por_rol(df, usuario, rol, usuarios)
 
         st.dataframe(df_usuario, use_container_width=True)
+
+        # 👉 Extra: Solo mostrar resumen si es rol principal
+        if rol == "principal":
+            # Filtrar según tus reglas de fecha_baja y fecha_blacklist
+            df_filtrado = df[
+                (df["fecha_baja"].isna() | (df["fecha_baja"] == "")) |
+                (df["fecha_blacklist"].isna() | (df["fecha_blacklist"] == ""))
+            ]
+
+            # Resumen por departamento
+            resumen_departamento = (
+                df_filtrado.groupby("ubicacion_departamento")["nombre_colaborador_agencia"]
+                .count()
+                .reset_index(name="cantidad_colaboradores")
+            )
+
+            # Resumen por distribuidor
+            resumen_distribuidor = (
+                df_filtrado.groupby("distribuidor").agg(
+                    cantidad_vendedores=("cargo", lambda x: (x == "Vendedor").sum()),
+                    cantidad_freelance=("cargo", lambda x: (x == "Freelance").sum())
+                )
+                .reset_index()
+            )
+
+            st.subheader("📊 Colaboradores por Departamento")
+            st.dataframe(resumen_departamento, use_container_width=True)
+
+            st.subheader("📊 Resumen por Distribuidor")
+            st.dataframe(resumen_distribuidor, use_container_width=True)
+
+
         return df, df_usuario
 
     except Exception as e:
