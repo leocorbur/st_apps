@@ -51,6 +51,15 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
                 .reset_index(name="cantidad_colaboradores")
             )
 
+            # 👉 Agregar fila de total
+            total_dep = pd.DataFrame({
+                "ubicacion_departamento": ["TOTAL"],
+                "cantidad_colaboradores": [resumen_departamento["cantidad_colaboradores"].sum()]
+            })
+
+            resumen_departamento = pd.concat([resumen_departamento, total_dep], ignore_index=True)
+
+
             # Resumen por distribuidor
             resumen_distribuidor = (
                 df_filtrado.groupby("distribuidor").agg(
@@ -60,6 +69,15 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
                 .reset_index()
             )
 
+            # 👉 Agregar fila de total
+            total_dist = pd.DataFrame({
+                "distribuidor": ["TOTAL"],
+                "cantidad_vendedores": [resumen_distribuidor["cantidad_vendedores"].sum()],
+                "cantidad_freelance": [resumen_distribuidor["cantidad_freelance"].sum()]
+            })
+
+            resumen_distribuidor = pd.concat([resumen_distribuidor, total_dist], ignore_index=True)
+            
             col1, col2 = st.columns(2)
 
             with col1:
