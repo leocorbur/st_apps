@@ -51,13 +51,7 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
                 .reset_index(name="cantidad_colaboradores")
             )
 
-            # 👉 Agregar fila de total
-            total_dep = pd.DataFrame({
-                "ubicacion_departamento": ["TOTAL"],
-                "cantidad_colaboradores": [resumen_departamento["cantidad_colaboradores"].sum()]
-            })
-
-            resumen_departamento = pd.concat([resumen_departamento, total_dep], ignore_index=True)
+            total_dep = resumen_departamento["cantidad_colaboradores"].sum()
 
 
             resumen_distribuidor = (
@@ -73,30 +67,18 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
                 .reset_index()
             )
 
-            # 👉 Agregar fila de total
-            total_dist = pd.DataFrame({
-                "distribuidor": ["TOTAL"],
-                "cantidad_vendedores": [resumen_distribuidor["cantidad_vendedores"].sum()],
-                "cantidad_freelance": [resumen_distribuidor["cantidad_freelance"].sum()],
-                "cantidad_digital": [resumen_distribuidor["cantidad_digital"].sum()],
-                "cantidad_dueno": [resumen_distribuidor["cantidad_dueno"].sum()],
-                "cantidad_supervisor": [resumen_distribuidor["cantidad_supervisor"].sum()],
-                "cantidad_formador": [resumen_distribuidor["cantidad_formador"].sum()],
-                "cantidad_backoffice": [resumen_distribuidor["cantidad_backoffice"].sum()]
+            total_dist = resumen_distribuidor.drop(columns="distribuidor").sum().to_dict()
 
-            })
-
-            resumen_distribuidor = pd.concat([resumen_distribuidor, total_dist], ignore_index=True)
 
             col1, col2 = st.columns(2)
 
             with col1:
                 st.subheader("📊 Colaboradores por Departamento")
-                st.dataframe(resumen_departamento.reset_index(drop=True), use_container_width=True)
-
+                st.dataframe(resumen_departamento, use_container_width=True)
+                st.metric("Total colaboradores", total_dep)
             with col2:
                 st.subheader("📊 Resumen por Distribuidor")
-                st.dataframe(resumen_distribuidor.reset_index(drop=True), use_container_width=True)
+                st.dataframe(resumen_distribuidor, use_container_width=True)
 
 
 
