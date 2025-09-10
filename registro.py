@@ -60,11 +60,15 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
             resumen_departamento = pd.concat([resumen_departamento, total_dep], ignore_index=True)
 
 
-            # Resumen por distribuidor
             resumen_distribuidor = (
                 df_filtrado.groupby("distribuidor").agg(
                     cantidad_vendedores=("cargo", lambda x: (x == "Vendedor").sum()),
-                    cantidad_freelance=("cargo", lambda x: (x == "Freelance").sum())
+                    cantidad_freelance=("cargo", lambda x: (x == "Freelance").sum()),
+                    cantidad_digital=("cargo", lambda x: (x == "Digital").sum()),
+                    cantidad_dueno=("cargo", lambda x: (x == "Dueño").sum()),
+                    cantidad_supervisor=("cargo", lambda x: (x == "Supervisor").sum()),
+                    cantidad_formador=("cargo", lambda x: (x == "Formador").sum()),
+                    cantidad_backoffice=("cargo", lambda x: (x == "Backoffice").sum())
                 )
                 .reset_index()
             )
@@ -73,7 +77,13 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
             total_dist = pd.DataFrame({
                 "distribuidor": ["TOTAL"],
                 "cantidad_vendedores": [resumen_distribuidor["cantidad_vendedores"].sum()],
-                "cantidad_freelance": [resumen_distribuidor["cantidad_freelance"].sum()]
+                "cantidad_freelance": [resumen_distribuidor["cantidad_freelance"].sum()],
+                "cantidad_digital": [resumen_distribuidor["cantidad_digital"].sum()],
+                "cantidad_dueno": [resumen_distribuidor["cantidad_dueno"].sum()],
+                "cantidad_supervisor": [resumen_distribuidor["cantidad_supervisor"].sum()],
+                "cantidad_formador": [resumen_distribuidor["cantidad_formador"].sum()],
+                "cantidad_backoffice": [resumen_distribuidor["cantidad_backoffice"].sum()]
+
             })
 
             resumen_distribuidor = pd.concat([resumen_distribuidor, total_dist], ignore_index=True)
