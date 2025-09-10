@@ -47,7 +47,7 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradore
     dominios_permitidos = [
         'relevantperu.com','2connect.pe','virtualbusiness.pe','nortealto.net','forzacorp.pe','dynatech.pro',
         'sefab.net','peru-b2b.com','vortexwow.com.pe','zilicom.com','raydrs.com','programming.pe','sergap.pe',
-        'myztelecom.com', 'wowempresario.com'
+        'myztelecom.com', 'wowempresario.com', 'redeswownegocios.com', 'tompi.pe'
     ]
 
     if submitted:
