@@ -34,7 +34,7 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
         df = pd.DataFrame(registros)
         df_usuario = filtrar_por_rol(df, usuario, rol, usuarios)
 
-        st.dataframe(df_usuario, use_container_width=True)
+        st.dataframe(df_usuario.reset_index(drop=True), use_container_width=True)
 
         # 👉 Extra: Solo mostrar resumen si es rol principal
         if rol == "principal" or rol == "supervisor":
@@ -77,16 +77,16 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
             })
 
             resumen_distribuidor = pd.concat([resumen_distribuidor, total_dist], ignore_index=True)
-            
+
             col1, col2 = st.columns(2)
 
             with col1:
                 st.subheader("📊 Colaboradores por Departamento")
-                st.dataframe(resumen_departamento, use_container_width=True)
+                st.dataframe(resumen_departamento.reset_index(drop=True), use_container_width=True)
 
             with col2:
                 st.subheader("📊 Resumen por Distribuidor")
-                st.dataframe(resumen_distribuidor, use_container_width=True)
+                st.dataframe(resumen_distribuidor.reset_index(drop=True), use_container_width=True)
 
 
 
