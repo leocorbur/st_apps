@@ -37,7 +37,7 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
         st.dataframe(df_usuario, use_container_width=True)
 
         # 👉 Extra: Solo mostrar resumen si es rol principal
-        if rol == "principal":
+        if rol == "principal" or rol == "supervisor":
             # Filtrar según tus reglas de fecha_baja y fecha_blacklist
             df_filtrado = df[
                 (df["fecha_baja"].isna() | (df["fecha_baja"] == "")) &
