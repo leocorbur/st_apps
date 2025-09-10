@@ -50,6 +50,10 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
                 .count()
                 .reset_index(name="cantidad_colaboradores")
             )
+            # ordenar por cantidad (descendente)
+            resumen_departamento = resumen_departamento.sort_values(
+                by="cantidad_colaboradores", ascending=False
+            ).reset_index(drop=True)
 
             total_dep = resumen_departamento["cantidad_colaboradores"].sum()
 
