@@ -40,7 +40,7 @@ dominios_permitidos = [
 
 # Mostrar formulario y guardar si es válido
 if rol_usuario == "backoffice":
-    datos = mostrar_formulario(correo_usuario, distribuidor_usuario, hoja_colaboradores, hoja_ubicaciones)
+    datos = mostrar_formulario(correo_usuario, distribuidor_usuario, hoja_colaboradores, hoja_ubicaciones, dominios_permitidos)
     if datos:
         try:
             hoja_colaboradores.append_row([
