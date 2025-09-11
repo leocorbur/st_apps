@@ -71,7 +71,8 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
                 .reset_index()
             )
 
-            total_dist = resumen_distribuidor.drop(columns="distribuidor").sum().to_dict()
+            totales = resumen_distribuidor.drop(columns="distribuidor").sum().to_dict()
+            totales = {k: int(v) for k, v in totales.items()}
 
 
             col1, col2 = st.columns(2)
@@ -84,7 +85,21 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
                 st.subheader("📊 Resumen por Distribuidor")
                 st.dataframe(resumen_distribuidor, use_container_width=True)
 
+            # Mostrar métricas en filas de 3
+            metrics = [
+                ("Vendedores", totales.get("cantidad_vendedores", 0)),
+                ("Freelance", totales.get("cantidad_freelance", 0)),
+                ("Digital", totales.get("cantidad_digital", 0)),
+                ("Dueño", totales.get("cantidad_dueno", 0)),
+                ("Supervisor", totales.get("cantidad_supervisor", 0)),
+                ("Formador", totales.get("cantidad_formador", 0)),
+                ("Backoffice", totales.get("cantidad_backoffice", 0)),
+            ]
 
+            for i in range(0, len(metrics), 3):
+                rcols = st.columns(3)
+                for c, (label, val) in zip(rcols, metrics[i:i+3]):
+                    c.metric(label, val)
 
         return df, df_usuario
 
