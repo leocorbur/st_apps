@@ -67,7 +67,7 @@ if df is not None and df_usuario is not None:
 
 if df is not None and df_usuario is not None:
     if rol_usuario == "backoffice":
-        dar_de_baja(df, df_usuario, hoja_colaboradores, correo_usuario)
+        dar_de_baja(df, df_usuario, hoja_colaboradores, correo_usuario, hoja_ubicaciones)
 
 # Supervisores
 if df is not None and df_usuario is not None:
