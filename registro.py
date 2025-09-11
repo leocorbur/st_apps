@@ -185,7 +185,7 @@ def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice, hoja
     if st.button("Actualizar"):
         if not departamento.strip() or not provincia.strip() or not cargo.strip() or not correo.strip():
             st.warning("⚠️ Por favor ingresar datos completos.")
-        elif not validar_correo(correo, dominios_permitidos):  # <--- Aquí defines tus dominios permitidos
+        elif not validar_correo(correo, cargo, dominios_permitidos):  # <--- Aquí defines tus dominios permitidos
             pass  # El validador ya muestra el error
         else:
             index_global = df[
