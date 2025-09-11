@@ -170,13 +170,15 @@ def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice, hoja
 
     departamento = st.selectbox(
     "Ubicación departamento",
-    options=df_ubicaciones["DEPARTAMENTO"].unique()
+    options=df_ubicaciones["DEPARTAMENTO"].unique(),
+    key="select_departamento"
     )
 
     provincias = df_ubicaciones[df_ubicaciones["DEPARTAMENTO"]==departamento]["PROVINCIA"].unique()
     provincia = st.selectbox(
         "Ubicación provincia",
-        options=provincias
+        options=provincias,
+        key="select_provincia"
     )
     
     if st.button("Actualizar"):
