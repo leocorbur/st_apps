@@ -7,7 +7,7 @@ import re
 
 from validaciones import validacion_dni
 
-def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradores, hoja_ubicaciones):
+def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradores, hoja_ubicaciones, dominios_permitidos):
 
     st.title("📋 Formulario de Registro de Vendedores")
 
@@ -43,12 +43,6 @@ def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradore
 
         fecha_inicio = str(st.date_input("Fecha de inicio", value=datetime.date.today()))
         submitted = st.form_submit_button("Enviar")
-
-    dominios_permitidos = [
-        'relevantperu.com','2connect.pe','virtualbusiness.pe','nortealto.net','forzacorp.pe','dynatech.pro',
-        'sefab.net','peru-b2b.com','vortexwow.com.pe','zilicom.com','raydrs.com','programming.pe','sergap.pe',
-        'myztelecom.com', 'wowempresario.com', 'redeswownegocios.com', 'tompi.pe'
-    ]
 
     if submitted:
         # --- Validación número documento ---

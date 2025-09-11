@@ -31,7 +31,12 @@ correo_usuario = st.session_state["usuario"]
 rol_usuario = st.session_state["rol"]
 distribuidor_usuario = st.session_state["distribuidor"]
 
-
+# Whitelist
+dominios_permitidos = [
+        'relevantperu.com','2connect.pe','virtualbusiness.pe','nortealto.net','forzacorp.pe','dynatech.pro',
+        'sefab.net','peru-b2b.com','vortexwow.com.pe','zilicom.com','raydrs.com','programming.pe','sergap.pe',
+        'myztelecom.com', 'wowempresario.com', 'redeswownegocios.com', 'tompi.pe'
+    ]
 
 # Mostrar formulario y guardar si es válido
 if rol_usuario == "backoffice":
