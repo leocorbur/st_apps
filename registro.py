@@ -46,17 +46,22 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
             ]
 
             # Resumen por departamento
-            resumen_departamento = (
-                df_filtrado.groupby("ubicacion_departamento")["nombre_colaborador_agencia"]
-                .count()
-                .reset_index(name="cantidad_colaboradores")
-            )
-            # ordenar por cantidad (descendente)
-            resumen_departamento = resumen_departamento.sort_values(
-                by="cantidad_colaboradores", ascending=False
-            ).reset_index(drop=True)
 
-            total_dep = resumen_departamento["cantidad_colaboradores"].sum()
+            resumen_departamento = (
+                df_filtrado.groupby("ubicacion_departamento").agg(
+                    cantidad_vendedores=("cargo", lambda x: (x == "Vendedor").sum()),
+                    cantidad_freelance=("cargo", lambda x: (x == "Freelance").sum()),
+                    cantidad_digital=("cargo", lambda x: (x == "Digital").sum()),
+                    cantidad_dueno=("cargo", lambda x: (x == "Dueño").sum()),
+                    cantidad_supervisor=("cargo", lambda x: (x == "Supervisor").sum()),
+                    cantidad_formador=("cargo", lambda x: (x == "Formador").sum()),
+                    cantidad_backoffice=("cargo", lambda x: (x == "Backoffice").sum())
+                )
+                .reset_index()
+            )      
+
+            total_dep = resumen_departamento.drop(columns="ubicacion_departamento").sum().to_dict()
+
 
 
             resumen_distribuidor = (
@@ -79,9 +84,24 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
             col1, col2 = st.columns(2)
 
             with col1:
-                st.subheader("📊 Colaboradores por Departamento")
+                st.subheader("📊 Resumen por Departamento")
                 st.dataframe(resumen_departamento, use_container_width=True)
-                st.metric("Total colaboradores", total_dep)
+
+                # Mostrar métricas en filas de 3
+                metrics_ = [
+                    ("Vendedores", total_dep.get("cantidad_vendedores", 0)),
+                    ("Freelance", total_dep.get("cantidad_freelance", 0)),
+                    ("Digital", total_dep.get("cantidad_digital", 0)),
+                    ("Dueño", total_dep.get("cantidad_dueno", 0)),
+                    ("Supervisor", total_dep.get("cantidad_supervisor", 0)),
+                    ("Formador", total_dep.get("cantidad_formador", 0)),
+                    ("Backoffice", total_dep.get("cantidad_backoffice", 0)),
+                ]
+
+                for i in range(0, len(metrics_), 3):
+                    rcols = st.columns(3)
+                    for c, (label, val) in zip(rcols, metrics_[i:i+3]):
+                        c.metric(label, val)                
             with col2:
                 st.subheader("📊 Resumen por Distribuidor")
                 st.dataframe(resumen_distribuidor, use_container_width=True)
