@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import datetime
 import pytz
+from utils import validar_correo
 
 
 
@@ -144,7 +145,7 @@ def dar_de_baja(df, df_usuario, hoja_colaboradores, correo_backoffice):
             st.success(f"✅ {seleccionado} fue dado de baja correctamente.")
 
 
-def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice, hoja_ubicaciones):
+def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice, hoja_ubicaciones, dominios_permitidos):
     """Permite seleccionar y editar a un colaborador"""
     st.markdown("---")
     st.subheader("Editar colaborador")
@@ -162,9 +163,9 @@ def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice, hoja
 
     seleccionado = st.selectbox("Selecciona al colaborador a editar:", nombres_disponibles)
     cargo = st.selectbox("Cargo:", ["Backoffice", "Supervisor", "Vendedor", "Freelance"])
+    correo = st.text_input("Correo electrónico", "")
 
     # Detalla ubicacion del vendedor
-
     ubicaciones = hoja_ubicaciones.get_all_records()
     df_ubicaciones = pd.DataFrame(ubicaciones)
 
@@ -182,14 +183,17 @@ def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice, hoja
     )
     
     if st.button("Actualizar"):
-        if not departamento.strip() or not provincia.strip() or not cargo.strip():
+        if not departamento.strip() or not provincia.strip() or not cargo.strip() or not correo.strip():
             st.warning("⚠️ Por favor ingresar datos completos.")
+        elif not validar_correo(correo, dominios_permitidos):  # <--- Aquí defines tus dominios permitidos
+            pass  # El validador ya muestra el error
         else:
             index_global = df[
                 (df["correo_backoffice"] == correo_backoffice) &
                 (df["nombre_colaborador_agencia"] == seleccionado)
             ].index[0]
             hoja_colaboradores.update_cell(index_global + 2, df.columns.get_loc("cargo") + 1, cargo)
+            hoja_colaboradores.update_cell(index_global + 2, df.columns.get_loc("correo") + 1, correo)
             hoja_colaboradores.update_cell(index_global + 2, df.columns.get_loc("ubicacion_departamento") + 1, departamento)
             hoja_colaboradores.update_cell(index_global + 2, df.columns.get_loc("ubicacion_provincia") + 1, provincia)
 
