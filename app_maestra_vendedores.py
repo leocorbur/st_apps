@@ -63,11 +63,11 @@ df, df_usuario = mostrar_tabla_por_rol(hoja_colaboradores, correo_usuario, rol_u
 
 if df is not None and df_usuario is not None:
     if rol_usuario == "backoffice":
-        editar_registros(df, df_usuario, hoja_colaboradores, correo_usuario)
+        editar_registros(df, df_usuario, hoja_colaboradores, correo_usuario, hoja_ubicaciones)
 
 if df is not None and df_usuario is not None:
     if rol_usuario == "backoffice":
-        dar_de_baja(df, df_usuario, hoja_colaboradores, correo_usuario, hoja_ubicaciones)
+        dar_de_baja(df, df_usuario, hoja_colaboradores, correo_usuario)
 
 # Supervisores
 if df is not None and df_usuario is not None:
