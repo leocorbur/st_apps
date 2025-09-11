@@ -144,7 +144,7 @@ def dar_de_baja(df, df_usuario, hoja_colaboradores, correo_backoffice):
             st.success(f"✅ {seleccionado} fue dado de baja correctamente.")
 
 
-def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice):
+def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice, hoja_ubicaciones):
     """Permite seleccionar y editar a un colaborador"""
     st.markdown("---")
     st.subheader("Editar colaborador")
@@ -162,9 +162,23 @@ def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice):
 
     seleccionado = st.selectbox("Selecciona al colaborador a editar:", nombres_disponibles)
     cargo = st.selectbox("Cargo:", ["Backoffice", "Supervisor", "Vendedor", "Freelance"])
-    departamento = st.text_input("Departamento")
-    provincia = st.text_input("Provincia")
 
+    # Detalla ubicacion del vendedor
+
+    ubicaciones = hoja_ubicaciones.get_all_records()
+    df_ubicaciones = pd.DataFrame(ubicaciones)
+
+    departamento = st.selectbox(
+    "Ubicación departamento",
+    options=df_ubicaciones["DEPARTAMENTO"].unique()
+    )
+
+    provincias = df_ubicaciones[df_ubicaciones["DEPARTAMENTO"]==departamento]["PROVINCIA"].unique()
+    provincia = st.selectbox(
+        "Ubicación provincia",
+        options=provincias
+    )
+    
     if st.button("Actualizar"):
         if not departamento.strip() or not provincia.strip() or not cargo.strip():
             st.warning("⚠️ Por favor ingresar datos completos.")
