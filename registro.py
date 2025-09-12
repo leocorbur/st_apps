@@ -46,7 +46,6 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
             ]
 
             # Resumen por departamento
-
             resumen_departamento = (
                 df_filtrado.groupby("ubicacion_departamento").agg(
                     cantidad_vendedores=("cargo", lambda x: (x == "Vendedor").sum()),
@@ -58,12 +57,28 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
                     cantidad_backoffice=("cargo", lambda x: (x == "Backoffice").sum())
                 )
                 .reset_index()
-            )      
+            )   
+
+            # 👉 Agregar columna total
+            resumen_departamento["total_colaboradores"] = (
+                resumen_departamento[
+                    [
+                        "cantidad_vendedores",
+                        "cantidad_freelance",
+                        "cantidad_digital",
+                        "cantidad_dueno",
+                        "cantidad_supervisor",
+                        "cantidad_formador",
+                        "cantidad_backoffice",
+                    ]
+                ].sum(axis=1)
+            )
+     
 
             total_dep = resumen_departamento.drop(columns="ubicacion_departamento").sum().to_dict()
 
 
-
+            # Resumen por distribuidor
             resumen_distribuidor = (
                 df_filtrado.groupby("distribuidor").agg(
                     cantidad_vendedores=("cargo", lambda x: (x == "Vendedor").sum()),
