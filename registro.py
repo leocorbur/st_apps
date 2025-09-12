@@ -125,11 +125,11 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
 
             with col1:
                 st.subheader("📊 Resumen por Departamento")
-                st.dataframe(resumen_departamento, use_container_width=True)
+                st.dataframe(resumen_departamento.reset_index(drop=True), use_container_width=True)
       
             with col2:
                 st.subheader("📊 Resumen por Distribuidor")
-                st.dataframe(resumen_distribuidor, use_container_width=True)
+                st.dataframe(resumen_distribuidor.reset_index(drop=True), use_container_width=True)
 
             # Mostrar métricas en filas de 3
             metrics = [
