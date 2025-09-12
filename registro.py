@@ -126,41 +126,26 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
             with col1:
                 st.subheader("📊 Resumen por Departamento")
                 st.dataframe(resumen_departamento, use_container_width=True)
-
-                # Mostrar métricas en filas de 3
-                metrics_ = [
-                    ("Vendedores", total_dep.get("cantidad_vendedores", 0)),
-                    ("Freelance", total_dep.get("cantidad_freelance", 0)),
-                    ("Digital", total_dep.get("cantidad_digital", 0)),
-                    ("Dueño", total_dep.get("cantidad_dueno", 0)),
-                    ("Supervisor", total_dep.get("cantidad_supervisor", 0)),
-                    ("Formador", total_dep.get("cantidad_formador", 0)),
-                    ("Backoffice", total_dep.get("cantidad_backoffice", 0)),
-                ]
-
-                for i in range(0, len(metrics_), 3):
-                    rcols = st.columns(3)
-                    for c, (label, val) in zip(rcols, metrics_[i:i+3]):
-                        c.metric(label, val)                
+      
             with col2:
                 st.subheader("📊 Resumen por Distribuidor")
                 st.dataframe(resumen_distribuidor, use_container_width=True)
 
-                # Mostrar métricas en filas de 3
-                metrics = [
-                    ("Vendedores", totales.get("cantidad_vendedores", 0)),
-                    ("Freelance", totales.get("cantidad_freelance", 0)),
-                    ("Digital", totales.get("cantidad_digital", 0)),
-                    ("Dueño", totales.get("cantidad_dueno", 0)),
-                    ("Supervisor", totales.get("cantidad_supervisor", 0)),
-                    ("Formador", totales.get("cantidad_formador", 0)),
-                    ("Backoffice", totales.get("cantidad_backoffice", 0)),
-                ]
+            # Mostrar métricas en filas de 3
+            metrics = [
+                ("Vendedores", totales.get("cantidad_vendedores", 0)),
+                ("Freelance", totales.get("cantidad_freelance", 0)),
+                ("Digital", totales.get("cantidad_digital", 0)),
+                ("Dueño", totales.get("cantidad_dueno", 0)),
+                ("Supervisor", totales.get("cantidad_supervisor", 0)),
+                ("Formador", totales.get("cantidad_formador", 0)),
+                ("Backoffice", totales.get("cantidad_backoffice", 0)),
+            ]
 
-                for i in range(0, len(metrics), 3):
-                    rcols = st.columns(3)
-                    for c, (label, val) in zip(rcols, metrics[i:i+3]):
-                        c.metric(label, val)
+            for i in range(0, len(metrics), 3):
+                rcols = st.columns(3)
+                for c, (label, val) in zip(rcols, metrics[i:i+3]):
+                    c.metric(label, val)
 
         return df, df_usuario
 
