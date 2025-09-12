@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import datetime
 import pytz
-from utils import validar_correo
+from utils import validar_correo, mostrar_resumen
 
 
 
@@ -37,115 +37,11 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
 
         st.dataframe(df_usuario.reset_index(drop=True), use_container_width=True)
 
-        # 👉 Extra: Solo mostrar resumen si es rol principal
-        if rol == "principal" or rol == "supervisor":
-            # Filtrar según tus reglas de fecha_baja y fecha_blacklist
-            df_filtrado = df[
-                (df["fecha_baja"].isna() | (df["fecha_baja"] == "")) &
-                (df["fecha_blacklist"].isna() | (df["fecha_blacklist"] == ""))
-            ]
-
-            # Resumen por departamento
-            resumen_departamento = (
-                df_filtrado.groupby("ubicacion_departamento").agg(
-                    cantidad_vendedores=("cargo", lambda x: (x == "Vendedor").sum()),
-                    cantidad_freelance=("cargo", lambda x: (x == "Freelance").sum()),
-                    cantidad_digital=("cargo", lambda x: (x == "Digital").sum()),
-                    cantidad_dueno=("cargo", lambda x: (x == "Dueño").sum()),
-                    cantidad_supervisor=("cargo", lambda x: (x == "Supervisor").sum()),
-                    cantidad_formador=("cargo", lambda x: (x == "Formador").sum()),
-                    cantidad_backoffice=("cargo", lambda x: (x == "Backoffice").sum())
-                )
-                .reset_index()
-            )   
-
-            # 👉 Agregar columna total
-            resumen_departamento["total_colaboradores"] = (
-                resumen_departamento[
-                    [
-                        "cantidad_vendedores",
-                        "cantidad_freelance",
-                        "cantidad_digital",
-                        "cantidad_dueno",
-                        "cantidad_supervisor",
-                        "cantidad_formador",
-                        "cantidad_backoffice",
-                    ]
-                ].sum(axis=1)
-            )
-            # Ordenar de mayor a menor
-            resumen_departamento = resumen_departamento.sort_values(
-                by="total_colaboradores", ascending=False
-            )
-                
-
-            total_dep = resumen_departamento.drop(columns="ubicacion_departamento").sum().to_dict()
+        # 👉 Solo muestra resumen
+        if rol in ("principal", "supervisor"):
+            mostrar_resumen(df_usuario)
 
 
-            # Resumen por distribuidor
-            resumen_distribuidor = (
-                df_filtrado.groupby("distribuidor").agg(
-                    cantidad_vendedores=("cargo", lambda x: (x == "Vendedor").sum()),
-                    cantidad_freelance=("cargo", lambda x: (x == "Freelance").sum()),
-                    cantidad_digital=("cargo", lambda x: (x == "Digital").sum()),
-                    cantidad_dueno=("cargo", lambda x: (x == "Dueño").sum()),
-                    cantidad_supervisor=("cargo", lambda x: (x == "Supervisor").sum()),
-                    cantidad_formador=("cargo", lambda x: (x == "Formador").sum()),
-                    cantidad_backoffice=("cargo", lambda x: (x == "Backoffice").sum())
-                )
-                .reset_index()
-            )
-
-            # 👉 Agregar columna total
-            resumen_distribuidor["total_colaboradores"] = (
-                resumen_departamento[
-                    [
-                        "cantidad_vendedores",
-                        "cantidad_freelance",
-                        "cantidad_digital",
-                        "cantidad_dueno",
-                        "cantidad_supervisor",
-                        "cantidad_formador",
-                        "cantidad_backoffice",
-                    ]
-                ].sum(axis=1)
-            )
-
-             # Ordenar de mayor a menor
-            resumen_distribuidor = resumen_distribuidor.sort_values(
-                by="total_colaboradores", ascending=False
-            )
-
-
-            totales = resumen_distribuidor.drop(columns="distribuidor").sum().to_dict()
-            totales = {k: int(v) for k, v in totales.items()}
-
-
-            col1, col2 = st.columns(2)
-
-            with col1:
-                st.subheader("📊 Resumen por Departamento")
-                st.dataframe(resumen_departamento.reset_index(drop=True), use_container_width=True)
-      
-            with col2:
-                st.subheader("📊 Resumen por Distribuidor")
-                st.dataframe(resumen_distribuidor.reset_index(drop=True), use_container_width=True)
-
-            # Mostrar métricas en filas de 3
-            metrics = [
-                ("Vendedores", totales.get("cantidad_vendedores", 0)),
-                ("Freelance", totales.get("cantidad_freelance", 0)),
-                ("Digital", totales.get("cantidad_digital", 0)),
-                ("Dueño", totales.get("cantidad_dueno", 0)),
-                ("Supervisor", totales.get("cantidad_supervisor", 0)),
-                ("Formador", totales.get("cantidad_formador", 0)),
-                ("Backoffice", totales.get("cantidad_backoffice", 0)),
-            ]
-
-            for i in range(0, len(metrics), 3):
-                rcols = st.columns(3)
-                for c, (label, val) in zip(rcols, metrics[i:i+3]):
-                    c.metric(label, val)
 
         return df, df_usuario
 

@@ -5,7 +5,7 @@ import datetime
 import pytz
 import re
 
-from validaciones import validacion_dni
+from utils import validacion_dni
 
 def mostrar_formulario(correo_backoffice,distribuidor_usuario, hoja_colaboradores, hoja_ubicaciones, dominios_permitidos):
 
