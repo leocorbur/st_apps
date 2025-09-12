@@ -73,7 +73,11 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
                     ]
                 ].sum(axis=1)
             )
-     
+            # Ordenar de mayor a menor
+            resumen_departamento = resumen_departamento.sort_values(
+                by="total_colaboradores", ascending=False
+            )
+                
 
             total_dep = resumen_departamento.drop(columns="ubicacion_departamento").sum().to_dict()
 
@@ -91,6 +95,27 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
                 )
                 .reset_index()
             )
+
+            # 👉 Agregar columna total
+            resumen_distribuidor["total_colaboradores"] = (
+                resumen_departamento[
+                    [
+                        "cantidad_vendedores",
+                        "cantidad_freelance",
+                        "cantidad_digital",
+                        "cantidad_dueno",
+                        "cantidad_supervisor",
+                        "cantidad_formador",
+                        "cantidad_backoffice",
+                    ]
+                ].sum(axis=1)
+            )
+
+             # Ordenar de mayor a menor
+            resumen_distribuidor = resumen_distribuidor.sort_values(
+                by="total_colaboradores", ascending=False
+            )
+
 
             totales = resumen_distribuidor.drop(columns="distribuidor").sum().to_dict()
             totales = {k: int(v) for k, v in totales.items()}
