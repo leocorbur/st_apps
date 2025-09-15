@@ -103,7 +103,7 @@ def editar_registros(df, df_usuario, hoja_colaboradores, correo_backoffice, hoja
         return
 
     seleccionado = st.selectbox("Selecciona al colaborador a editar:", nombres_disponibles)
-    cargo = st.selectbox("Cargo:", ["Backoffice", "Supervisor", "Vendedor", "Freelance"])
+    cargo = st.selectbox("Cargo:", ["Backoffice", "Supervisor", "Vendedor", "Freelance", "Dueño", "Formador", "Digital"])
     correo = st.text_input("Correo electrónico", "")
 
     # Detalla ubicacion del vendedor
