@@ -35,7 +35,8 @@ distribuidor_usuario = st.session_state["distribuidor"]
 dominios_permitidos = [
         'relevantperu.com','2connect.pe','virtualbusiness.pe','nortealto.net','forzacorp.pe','dynatech.pro',
         'sefab.net','peru-b2b.com','vortexwow.com.pe','zilicom.com','raydrs.com','programming.pe','sergap.pe',
-        'myztelecom.com', 'wowempresario.com', 'redeswownegocios.com', 'tompi.pe', 'zilicomgroup.com', 'gt-connection.com'
+        'myztelecom.com', 'wowempresario.com', 'redeswownegocios.com', 'tompi.pe', 'zilicomgroup.com', 'gt-connection.com',
+        'deprueba.pe', 'rydrs-ventas.com'
     ]
 
 # Mostrar formulario y guardar si es válido
