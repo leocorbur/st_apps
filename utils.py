@@ -202,21 +202,26 @@ def mostrar_mapa(df):
       max_colabs = df_mapa['Freelance'].max() if df_mapa['Freelance'].max() > 0 else 1
       df_mapa['color_intensidad'] = (df_mapa['Freelance'] / max_colabs * 255).astype(int)
 
+      # Ajuste del tamaño de los círculos (metros)
+      # Si hay muchos vendedores, reduce el factor (p.ej. 800), si pocos, súbelo (p.ej. 2000)
+      df_mapa['radio'] = df_mapa['Vendedor'] * 1500 + 2000
+
       # Crear capa
       layer = pdk.Layer(
             'ScatterplotLayer',
             data=df_mapa,
             get_position='[lon, lat]',
             get_fill_color='[color_intensidad, 50, 255 - color_intensidad, 180]',  # de azul a rojo
-            get_radius='Vendedor * 50',  # tamaño según vendedores
+            get_radius='radio',  # tamaño según vendedores
             pickable=True,
         )
       
-      # Vista inicial
+    # Vista centrada en Perú 🇵🇪
       view_state = pdk.ViewState(
-            latitude=df_mapa['lat'].mean(),
-            longitude=df_mapa['lon'].mean(),
-            zoom=6,
+            latitude=-9.19,   # Centro geográfico de Perú
+            longitude=-75.015,
+            zoom=5,
+            pitch=0,
         )
       
       # Mapa
