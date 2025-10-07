@@ -204,7 +204,7 @@ def mostrar_mapa(df):
 
       # Ajuste del tamaño de los círculos (metros)
       # Si hay muchos vendedores, reduce el factor (p.ej. 800), si pocos, súbelo (p.ej. 2000)
-      df_mapa['radio'] = df_mapa['Vendedor'] * 1500 + 2000
+      df_mapa['radio'] = df_mapa['Vendedor'] * 1500 + 5000
 
       # Crear capa
       layer = pdk.Layer(
