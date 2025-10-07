@@ -3,6 +3,7 @@ import streamlit as st
 import pandas as pd
 import datetime
 import pytz
+import pydeck as pdk
 
 # Validadores
 
@@ -163,3 +164,69 @@ def mostrar_resumen(df):
         rcols = st.columns(3)
         for c, (label, val) in zip(rcols, metrics[i:i+3]):
             c.metric(label, val)
+
+# Mapa Perú
+def mostrar_mapa(df):
+      df_filtrado = df[
+        (df["fecha_baja"].isna() | (df["fecha_baja"] == "")) &
+        (df["fecha_blacklist"].isna() | (df["fecha_blacklist"] == "")) &
+        df["cargo"].isin(["Vendedor", "Freelance"])
+    ] [["nombre_colaborador_agencia","ubicacion_departamento", "coordenadas", "cargo"]]
+      
+    # Vendedores y freelance por departamento
+      df_pivot = (
+            df_filtrado
+            .pivot_table(
+                index="ubicacion_departamento",
+                columns="cargo",
+                values="nombre_colaborador_agencia",
+                aggfunc="count",
+                fill_value=0
+            )
+            .reset_index()
+        )
+      
+      df_coordenadas = (
+            df_filtrado[["ubicacion_departamento", "coordenadas"]]
+            .drop_duplicates(subset=["ubicacion_departamento"])
+        )
+      
+      df_mapa = (
+            df_pivot
+            .merge(df_coordenadas, on="ubicacion_departamento", how="left")
+        )
+      df_mapa[['lat', 'lon']] = df_mapa['coordenadas'].str.split(', ', expand=True).astype(float)
+      df_mapa = df_mapa.drop(columns=['coordenadas'])
+
+      # Normalizar Freelance para color (evitar división por cero)
+      max_colabs = df_mapa['Freelance'].max() if df_mapa['Freelance'].max() > 0 else 1
+      df_mapa['color_intensidad'] = (df_mapa['Freelance'] / max_colabs * 255).astype(int)
+
+      # Crear capa
+      layer = pdk.Layer(
+            'ScatterplotLayer',
+            data=df_mapa,
+            get_position='[lon, lat]',
+            get_fill_color='[color_intensidad, 50, 255 - color_intensidad, 180]',  # de azul a rojo
+            get_radius='Vendedor * 50',  # tamaño según vendedores
+            pickable=True,
+        )
+      
+      # Vista inicial
+      view_state = pdk.ViewState(
+            latitude=df_mapa['lat'].mean(),
+            longitude=df_mapa['lon'].mean(),
+            zoom=6,
+        )
+      
+      # Mapa
+      st.pydeck_chart(pdk.Deck(
+            layers=[layer],
+            initial_view_state=view_state,
+            tooltip={"text": "{ubicacion_departamento}\nVendedores: {Vendedor}\nFreelances: {Freelance}"}
+        ))
+
+      
+
+      
+    

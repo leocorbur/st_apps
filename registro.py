@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import datetime
 import pytz
-from utils import validar_correo, mostrar_resumen
+from utils import validar_correo, mostrar_resumen, mostrar_mapa
 
 
 
@@ -40,6 +40,7 @@ def mostrar_tabla_por_rol(hoja_colaboradores, usuario, rol, usuarios):
         # 👉 Solo muestra resumen
         if rol in ("principal", "supervisor"):
             mostrar_resumen(df_usuario)
+            mostrar_mapa(df_usuario)
 
 
 
